@@ -1,0 +1,40 @@
+name: Update QQQM market data
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs after the US market session on weekdays. The workflow stores one
+    # Shanghai-calendar snapshot per day and safely replaces same-day data.
+    - cron: "35 22 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update quote, FX, history and drawdown
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+        run: node scripts/update-data.mjs
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/data.json
+          if git diff --cached --quiet; then
+            echo "No data changes to commit"
+          else
+            git commit -m "chore: update QQQM market data"
+            git push
+          fi
