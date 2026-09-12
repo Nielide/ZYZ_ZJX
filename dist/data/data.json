@@ -3,51 +3,121 @@
   "shares": 4,
   "averageCostUsd": 276.6,
   "costUsd": 276.6,
-  "profitUsd": 71.16,
-  "valueCny": 7896.364092,
+  "profitUsd": 71.15999999999985,
+  "valueCny": 7896.481847999999,
   "maxDrawdownUsd": 0,
   "quote": {
     "price": 294.39,
     "change": 2.59,
     "changePercent": 0.8876,
-    "timestamp": "2026-09-12T09:57:03.762Z"
+    "timestamp": "2026-09-12T10:10:04.484Z"
   },
   "fx": {
-    "usdCny": 6.7057,
+    "usdCny": 6.7058,
     "date": "2026-09-13"
   },
   "holdingsDate": "2026-09-10",
   "totalHoldings": 109,
   "holdings": [
-    { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 8.528539 },
-    { "name": "Apple Inc", "ticker": "AAPL", "weight": 7.732313 },
-    { "name": "Microsoft Corp", "ticker": "MSFT", "weight": 5.897113 },
-    { "name": "Micron Technology Inc", "ticker": "MU", "weight": 4.905562 },
-    { "name": "Amazon.com Inc", "ticker": "AMZN", "weight": 4.368134 },
-    { "name": "Advanced Micro Devices Inc", "ticker": "AMD", "weight": 3.654609 },
-    { "name": "Alphabet Inc", "ticker": "GOOGL", "weight": 3.124783 },
-    { "name": "Meta Platforms Inc", "ticker": "META", "weight": 3.076209 },
-    { "name": "Tesla Inc", "ticker": "TSLA", "weight": 2.927804 },
-    { "name": "Alphabet Inc", "ticker": "GOOG", "weight": 2.907904 }
+    {
+      "name": "NVIDIA Corp",
+      "ticker": "NVDA",
+      "weight": 8.528539
+    },
+    {
+      "name": "Apple Inc",
+      "ticker": "AAPL",
+      "weight": 7.732313
+    },
+    {
+      "name": "Microsoft Corp",
+      "ticker": "MSFT",
+      "weight": 5.897113
+    },
+    {
+      "name": "Micron Technology Inc",
+      "ticker": "MU",
+      "weight": 4.905562
+    },
+    {
+      "name": "Amazon.com Inc",
+      "ticker": "AMZN",
+      "weight": 4.368134
+    },
+    {
+      "name": "Advanced Micro Devices Inc",
+      "ticker": "AMD",
+      "weight": 3.654609
+    },
+    {
+      "name": "Alphabet Inc",
+      "ticker": "GOOGL",
+      "weight": 3.124783
+    },
+    {
+      "name": "Meta Platforms Inc",
+      "ticker": "META",
+      "weight": 3.076209
+    },
+    {
+      "name": "Tesla Inc",
+      "ticker": "TSLA",
+      "weight": 2.927804
+    },
+    {
+      "name": "Alphabet Inc",
+      "ticker": "GOOG",
+      "weight": 2.907904
+    }
   ],
   "history": [
     {
       "date": "2026-09-12",
       "priceUsd": 294.39,
       "valueUsd": 1177.56,
-      "valueCny": 7896.364092,
-      "dailyPnlUsd": 0,
-      "dailyPnlCny": 0,
-      "cumulativePnlUsd": 71.16,
-      "rate": 0
+      "valueCny": 7896.481847999999,
+      "dailyPnlUsd": 10.36,
+      "dailyPnlCny": 69.472088,
+      "cumulativePnlUsd": 71.15999999999985,
+      "rate": 0.8876
     }
   ],
   "drawdown": [
-    { "symbol": "QQQM", "high": 294.39, "current": 294.39, "distance": 0, "progressPct": 100 },
-    { "symbol": "NVDA", "high": 235.47, "current": 218.29, "distance": 7.296, "progressPct": 92.704 },
-    { "symbol": "MSFT", "high": 538.66, "current": 495.63, "distance": 7.9883, "progressPct": 92.0117 },
-    { "symbol": "GOOGL", "high": 402.38, "current": 338.50, "distance": 15.8755, "progressPct": 84.1245 },
-    { "symbol": "AMZN", "high": 274.99, "current": 256.78, "distance": 6.6221, "progressPct": 93.3779 }
+    {
+      "symbol": "QQQM",
+      "high": 294.39,
+      "current": 294.39,
+      "distance": 0,
+      "progressPct": 100
+    },
+    {
+      "symbol": "NVDA",
+      "high": 235.47,
+      "current": 218.29,
+      "distance": 7.296,
+      "progressPct": 92.704
+    },
+    {
+      "symbol": "MSFT",
+      "high": 538.66,
+      "current": 495.63,
+      "distance": 7.9883,
+      "progressPct": 92.0117
+    },
+    {
+      "symbol": "GOOGL",
+      "high": 402.38,
+      "current": 338.5,
+      "distance": 15.8755,
+      "progressPct": 84.1245
+    },
+    {
+      "symbol": "AMZN",
+      "high": 274.99,
+      "current": 256.78,
+      "distance": 6.6221,
+      "progressPct": 93.3779
+    }
   ],
-  "updatedAt": "2026-09-12T09:57:03.762Z"
+  "updatedAt": "2026-09-12T10:10:04.484Z"
 }

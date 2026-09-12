@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(here, "..", "data", "data.json");
+const distDataPath = path.join(here, "..", "dist", "data", "data.json");
 const finnhubKey = process.env.FINNHUB_API_KEY;
 const execFileAsync = promisify(execFile);
 
@@ -144,5 +145,9 @@ if (Array.isArray(data.drawdown)) {
 }
 
 data.updatedAt = now;
-await writeFile(dataPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+const serializedData = `${JSON.stringify(data, null, 2)}\n`;
+await Promise.all([
+  writeFile(dataPath, serializedData, "utf8"),
+  writeFile(distDataPath, serializedData, "utf8")
+]);
 console.log(`Updated ${symbol} on ${date}: $${price.toFixed(2)}, USD/CNY ${Number(fx.rate).toFixed(4)}`);
