@@ -38,7 +38,17 @@
     }
 
     * { box-sizing: border-box; }
-    html { background: var(--black); }
+    html {
+      background: var(--black);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
     body {
       min-width: 320px;
       margin: 0;
@@ -48,19 +58,6 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
       overscroll-behavior-y: contain;
-    }
-
-    .scroll-progress {
-      position: fixed;
-      z-index: 8;
-      inset: 0 0 auto;
-      height: 3px;
-      background: var(--lime);
-      box-shadow: 0 0 18px rgba(186, 255, 0, .7);
-      pointer-events: none;
-      transform: scaleX(0);
-      transform-origin: left center;
-      will-change: transform;
     }
 
     button { font: inherit; }
@@ -295,7 +292,6 @@
   </style>
 </head>
 <body>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <div class="pull-refresh" id="pullRefresh" aria-hidden="true"><span class="pull-arrow" id="pullArrow">↓</span><span id="pullText">PULL TO REFRESH</span></div>
 
   <main class="page">
@@ -357,10 +353,12 @@
 
     let state = FALLBACK_DATA;
     let isRefreshing = false;
+    let isFxRefreshing = false;
     let pullStartY = 0;
     let pullDistance = 0;
     let holdingObserver;
     const numberAnimations = new WeakMap();
+    const numberValues = new WeakMap();
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const $ = (id) => document.getElementById(id);
@@ -378,8 +376,11 @@
 
     function animateNumber(element, target, formatter, delay = 0) {
       const safeTarget = Number.isFinite(Number(target)) ? Number(target) : 0;
+      const previousValue = numberValues.get(element);
+      const startValue = Number.isFinite(previousValue) ? previousValue : 0;
       const activeFrame = numberAnimations.get(element);
       if (activeFrame) cancelAnimationFrame(activeFrame);
+      numberValues.set(element, safeTarget);
 
       element.classList.remove("is-animating");
       void element.offsetWidth;
@@ -392,13 +393,13 @@
 
       const duration = 1250;
       let startTime;
-      element.textContent = formatter(0);
+      element.textContent = formatter(startValue);
 
       const tick = (now) => {
         if (startTime === undefined) startTime = now + delay;
         const progress = Math.min(1, Math.max(0, (now - startTime) / duration));
         const eased = 1 - Math.pow(1 - progress, 4);
-        element.textContent = formatter(safeTarget * eased);
+        element.textContent = formatter(startValue + (safeTarget - startValue) * eased);
 
         if (progress < 1) {
           const frame = requestAnimationFrame(tick);
@@ -470,17 +471,68 @@
       rows.forEach((row) => holdingObserver.observe(row));
     }
 
+    async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(url, { ...options, signal: controller.signal });
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
     async function fetchRuntimeData() {
-      const response = await fetch(`${CONFIG.dataUrl}?t=${Date.now()}`, { cache: "no-store" });
+      const response = await fetchWithTimeout(`${CONFIG.dataUrl}?t=${Date.now()}`, { cache: "no-store" }, 5000);
       if (!response.ok) throw new Error(`data ${response.status}`);
       return response.json();
     }
 
     async function refreshFx() {
-      const response = await fetch(`${CONFIG.fxEndpoint}?t=${Date.now()}`, { cache: "no-store" });
+      const response = await fetchWithTimeout(`${CONFIG.fxEndpoint}?t=${Date.now()}`, { cache: "no-store" }, 3500);
       if (!response.ok) throw new Error(`fx ${response.status}`);
       const result = await response.json();
-      if (Number.isFinite(Number(result.rate))) state.fx = { ...(state.fx || {}), usdCny: Number(result.rate), date: result.date || state.fx?.date };
+      if (!Number.isFinite(Number(result.rate))) return false;
+      state.fx = { ...(state.fx || {}), usdCny: Number(result.rate), date: result.date || state.fx?.date };
+      return true;
+    }
+
+    async function refreshRuntimeQuote() {
+      if (!CONFIG.runtimeQuoteEndpoint) return false;
+      const response = await fetchWithTimeout(`${CONFIG.runtimeQuoteEndpoint}?symbol=${encodeURIComponent(state.symbol)}&t=${Date.now()}`, { cache: "no-store" }, 3500);
+      if (!response.ok) throw new Error(`quote ${response.status}`);
+      const quote = await response.json();
+      if (!Number.isFinite(Number(quote.c))) return false;
+      state.quote = { ...state.quote, price: Number(quote.c), change: Number(quote.d || 0), changePercent: Number(quote.dp || 0) };
+      return true;
+    }
+
+    function recalculateDerivedValues() {
+      const shares = Number(state.shares || 0);
+      const price = Number(state.quote?.price || 0);
+      const averageCost = Number(state.averageCostUsd || state.costUsd || 0);
+      const fx = Number(state.fx?.usdCny || 0);
+      state.profitUsd = Number((price * shares - averageCost * shares).toFixed(2));
+      state.valueCny = Number((price * shares * fx).toFixed(2));
+    }
+
+    function markDataTime() {
+      $("dataStatus").textContent = `DATA — ${new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit" }).format(new Date())}`;
+    }
+
+    async function refreshMarketDataInBackground() {
+      if (isFxRefreshing) return;
+      isFxRefreshing = true;
+      try {
+        const results = await Promise.allSettled([refreshFx(), refreshRuntimeQuote()]);
+        const changed = results.some((result) => result.status === "fulfilled" && result.value);
+        if (changed) {
+          recalculateDerivedValues();
+          renderAccount();
+          markDataTime();
+        }
+      } finally {
+        isFxRefreshing = false;
+      }
     }
 
     async function refreshData() {
@@ -489,27 +541,16 @@
       try {
         const next = await fetchRuntimeData();
         state = { ...FALLBACK_DATA, ...next, quote: { ...FALLBACK_DATA.quote, ...(next.quote || {}) }, fx: { ...FALLBACK_DATA.fx, ...(next.fx || {}) } };
-        try { await refreshFx(); } catch (error) { /* workflow-saved FX remains available */ }
-        const shares = Number(state.shares || 0);
-        const price = Number(state.quote?.price || 0);
-        const averageCost = Number(state.averageCostUsd || state.costUsd || 0);
-        const fx = Number(state.fx?.usdCny || 0);
-        state.profitUsd = Number((price * shares - averageCost * shares).toFixed(2));
-        state.valueCny = Number((price * shares * fx).toFixed(2));
-        if (CONFIG.runtimeQuoteEndpoint) {
-          try {
-            const response = await fetch(`${CONFIG.runtimeQuoteEndpoint}?symbol=${encodeURIComponent(state.symbol)}&t=${Date.now()}`, { cache: "no-store" });
-            const quote = await response.json();
-            if (Number.isFinite(Number(quote.c))) state.quote = { ...state.quote, price: Number(quote.c), change: Number(quote.d || 0), changePercent: Number(quote.dp || 0) };
-          } catch (error) { /* static workflow data remains valid */ }
-        }
+        recalculateDerivedValues();
+        renderAccount();
+        renderHoldings();
+        markDataTime();
       } catch (error) {
-        /* The embedded design snapshot remains visible when opened without a server. */
+        $("dataStatus").textContent = "DATA — CACHED";
+      } finally {
+        isRefreshing = false;
+        void refreshMarketDataInBackground();
       }
-      renderAccount();
-      renderHoldings();
-      $("dataStatus").textContent = `DATA — ${new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit" }).format(new Date())}`;
-      isRefreshing = false;
     }
 
     function bindPullToRefresh() {
@@ -541,19 +582,9 @@
       }, { passive: true });
     }
 
-    function bindScrollProgress() {
-      const progress = $("scrollProgress");
-      const update = () => {
-        const distance = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        progress.style.transform = `scaleX(${Math.min(1, Math.max(0, window.scrollY / distance))})`;
-      };
-      window.addEventListener("scroll", update, { passive: true });
-      window.addEventListener("resize", update, { passive: true });
-      update();
-    }
-
     bindPullToRefresh();
-    bindScrollProgress();
+    renderAccount();
+    renderHoldings();
     refreshData();
     window.setInterval(refreshData, CONFIG.refreshMs);
   </script>
