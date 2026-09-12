@@ -7,7 +7,7 @@ const dataPath = path.join(here, "..", "data", "data.json");
 const finnhubKey = process.env.FINNHUB_API_KEY;
 
 if (!finnhubKey) {
-  throw new Error("FINNHUB_API_KEY is required. Add it as a GitHub Actions secret.");
+  throw new Error("FINNHUB_API_KEY is required. Add it in GitHub Settings → Secrets and variables → Actions.");
 }
 
 async function getJson(url) {

@@ -327,6 +327,12 @@
         const next = await fetchRuntimeData();
         state = { ...FALLBACK_DATA, ...next, quote: { ...FALLBACK_DATA.quote, ...(next.quote || {}) }, fx: { ...FALLBACK_DATA.fx, ...(next.fx || {}) } };
         try { await refreshFx(); } catch (error) { /* workflow-saved FX remains available */ }
+        const shares = Number(state.shares || 0);
+        const price = Number(state.quote?.price || 0);
+        const averageCost = Number(state.averageCostUsd || state.costUsd || 0);
+        const fx = Number(state.fx?.usdCny || 0);
+        state.profitUsd = Number((price * shares - averageCost * shares).toFixed(2));
+        state.valueCny = Number((price * shares * fx).toFixed(2));
         if (CONFIG.runtimeQuoteEndpoint) {
           try {
             const response = await fetch(`${CONFIG.runtimeQuoteEndpoint}?symbol=${encodeURIComponent(state.symbol)}&t=${Date.now()}`, { cache: "no-store" });
