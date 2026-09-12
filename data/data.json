@@ -3,9 +3,9 @@
   "shares": 4,
   "averageCostUsd": 276.63,
   "costUsd": 276.63,
-  "profitUsd": 71.03999999999996,
+  "profitUsd": 71.04,
   "valueCny": 7896.364092,
-  "maxDrawdownUsd": -5.6,
+  "maxDrawdownUsd": 0,
   "quote": {
     "price": 294.39,
     "change": 2.59,
@@ -17,186 +17,35 @@
     "date": "2026-09-13"
   },
   "holdings": [
-    {
-      "name": "NVIDIA Corp",
-      "ticker": "NVDA",
-      "weight": 7.6
-    },
-    {
-      "name": "Apple Inc",
-      "ticker": "AAPL",
-      "weight": 6.67
-    },
-    {
-      "name": "Alphabet Inc",
-      "ticker": "GOOGL / GOOG",
-      "weight": 6.29
-    },
-    {
-      "name": "Micron Technology Inc",
-      "ticker": "MU",
-      "weight": 5.64
-    },
-    {
-      "name": "Microsoft Corp",
-      "ticker": "MSFT",
-      "weight": 4.35
-    },
-    {
-      "name": "Advanced Micro Devices Inc",
-      "ticker": "AMD",
-      "weight": 4.11
-    },
-    {
-      "name": "Amazon.com Inc",
-      "ticker": "AMZN",
-      "weight": 4.03
-    },
-    {
-      "name": "Tesla Inc",
-      "ticker": "TSLA",
-      "weight": 3.3
-    },
-    {
-      "name": "Intel Corp",
-      "ticker": "INTC",
-      "weight": 3.04
-    },
-    {
-      "name": "Broadcom Inc",
-      "ticker": "AVGO",
-      "weight": 2.81
-    }
+    { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 7.60 },
+    { "name": "Apple Inc", "ticker": "AAPL", "weight": 6.67 },
+    { "name": "Alphabet Inc", "ticker": "GOOGL / GOOG", "weight": 6.29 },
+    { "name": "Micron Technology Inc", "ticker": "MU", "weight": 5.64 },
+    { "name": "Microsoft Corp", "ticker": "MSFT", "weight": 4.35 },
+    { "name": "Advanced Micro Devices Inc", "ticker": "AMD", "weight": 4.11 },
+    { "name": "Amazon.com Inc", "ticker": "AMZN", "weight": 4.03 },
+    { "name": "Tesla Inc", "ticker": "TSLA", "weight": 3.30 },
+    { "name": "Intel Corp", "ticker": "INTC", "weight": 3.04 },
+    { "name": "Broadcom Inc", "ticker": "AVGO", "weight": 2.81 }
   ],
   "history": [
-    {
-      "date": "2026-09-01",
-      "priceUsd": 198.2,
-      "valueUsd": 792.8,
-      "dailyPnlUsd": 0,
-      "dailyPnlCny": 0,
-      "cumulativePnlUsd": 32.8,
-      "rate": 0
-    },
-    {
-      "date": "2026-09-02",
-      "priceUsd": 201,
-      "valueUsd": 804,
-      "dailyPnlUsd": 11.2,
-      "dailyPnlCny": 80.42,
-      "cumulativePnlUsd": 44,
-      "rate": 1.41
-    },
-    {
-      "date": "2026-09-03",
-      "priceUsd": 199.6,
-      "valueUsd": 798.4,
-      "dailyPnlUsd": -5.6,
-      "dailyPnlCny": -40.21,
-      "cumulativePnlUsd": 38.4,
-      "rate": -0.7
-    },
-    {
-      "date": "2026-09-04",
-      "priceUsd": 203.4,
-      "valueUsd": 813.6,
-      "dailyPnlUsd": 15.2,
-      "dailyPnlCny": 109.14,
-      "cumulativePnlUsd": 53.6,
-      "rate": 1.9
-    },
-    {
-      "date": "2026-09-05",
-      "priceUsd": 204.1,
-      "valueUsd": 816.4,
-      "dailyPnlUsd": 2.8,
-      "dailyPnlCny": 20.1,
-      "cumulativePnlUsd": 56.4,
-      "rate": 0.34
-    },
-    {
-      "date": "2026-09-06",
-      "priceUsd": 202.9,
-      "valueUsd": 811.6,
-      "dailyPnlUsd": -4.8,
-      "dailyPnlCny": -34.46,
-      "cumulativePnlUsd": 51.6,
-      "rate": -0.59
-    },
-    {
-      "date": "2026-09-07",
-      "priceUsd": 205.1,
-      "valueUsd": 820.4,
-      "dailyPnlUsd": 8.8,
-      "dailyPnlCny": 63.18,
-      "cumulativePnlUsd": 60.4,
-      "rate": 1.08
-    },
-    {
-      "date": "2026-09-08",
-      "priceUsd": 204.6,
-      "valueUsd": 818.4,
-      "dailyPnlUsd": -2,
-      "dailyPnlCny": -14.36,
-      "cumulativePnlUsd": 58.4,
-      "rate": -0.24
-    },
-    {
-      "date": "2026-09-09",
-      "priceUsd": 205.42,
-      "valueUsd": 821.68,
-      "dailyPnlUsd": 3.28,
-      "dailyPnlCny": 23.55,
-      "cumulativePnlUsd": 61.68,
-      "rate": 0.4
-    },
     {
       "date": "2026-09-12",
       "priceUsd": 294.39,
       "valueUsd": 1177.56,
       "valueCny": 7896.364092,
-      "dailyPnlUsd": 355.88,
-      "dailyPnlCny": 2386.424516,
-      "cumulativePnlUsd": 71.03999999999996,
-      "rate": 43.31126472592737
+      "dailyPnlUsd": 0,
+      "dailyPnlCny": 0,
+      "cumulativePnlUsd": 71.04,
+      "rate": 0
     }
   ],
   "drawdown": [
-    {
-      "symbol": "QQQM",
-      "high": 210,
-      "current": 294.39,
-      "distance": -40.1857,
-      "progressPct": 100
-    },
-    {
-      "symbol": "NVDA",
-      "high": 235.47,
-      "current": 218.29,
-      "distance": 7.296,
-      "progressPct": 92.704
-    },
-    {
-      "symbol": "MSFT",
-      "high": 538.66,
-      "current": 495.63,
-      "distance": 7.9883,
-      "progressPct": 92.0117
-    },
-    {
-      "symbol": "GOOGL",
-      "high": 402.38,
-      "current": 338.5,
-      "distance": 15.8755,
-      "progressPct": 84.1245
-    },
-    {
-      "symbol": "AMZN",
-      "high": 274.99,
-      "current": 256.78,
-      "distance": 6.6221,
-      "progressPct": 93.3779
-    }
+    { "symbol": "QQQM", "high": 294.39, "current": 294.39, "distance": 0, "progressPct": 100 },
+    { "symbol": "NVDA", "high": 235.47, "current": 218.29, "distance": 7.296, "progressPct": 92.704 },
+    { "symbol": "MSFT", "high": 538.66, "current": 495.63, "distance": 7.9883, "progressPct": 92.0117 },
+    { "symbol": "GOOGL", "high": 402.38, "current": 338.50, "distance": 15.8755, "progressPct": 84.1245 },
+    { "symbol": "AMZN", "high": 274.99, "current": 256.78, "distance": 6.6221, "progressPct": 93.3779 }
   ],
   "updatedAt": "2026-09-12T09:57:03.762Z"
 }

@@ -296,7 +296,7 @@
       animateText($("priceValue"), money(price));
       animateText($("profitValue"), signedMoney(profit));
       animateText($("valueValue"), cny(valueCny));
-      animateText($("drawdownValue"), signedMoney(maxDrawdown));
+      animateText($("drawdownValue"), maxDrawdown < 0 ? signedMoney(maxDrawdown) : "$0.00");
     }
 
     function renderHoldings() {

@@ -90,6 +90,7 @@ if (Array.isArray(data.drawdown)) {
       const drawdownQuote = await getJson(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(item.symbol)}&token=${encodeURIComponent(finnhubKey)}`);
       if (Number.isFinite(drawdownQuote.c)) {
         item.current = Number(drawdownQuote.c);
+        item.high = Math.max(Number(item.high || 0), item.current);
         item.distance = calculateDrawdown(item.high, item.current);
         item.progressPct = Math.max(0, Math.min(100, 100 - item.distance));
       }

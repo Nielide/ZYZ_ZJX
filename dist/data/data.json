@@ -3,18 +3,18 @@
   "shares": 4,
   "averageCostUsd": 276.63,
   "costUsd": 276.63,
-  "profitUsd": 56.63,
-  "valueCny": 8762.63,
-  "maxDrawdownUsd": -62.63,
+  "profitUsd": 71.04,
+  "valueCny": 7896.364092,
+  "maxDrawdownUsd": 0,
   "quote": {
-    "price": 294.69,
-    "change": 0,
-    "changePercent": 0,
-    "timestamp": "2026-09-09T12:00:00.000Z"
+    "price": 294.39,
+    "change": 2.59,
+    "changePercent": 0.8876,
+    "timestamp": "2026-09-12T09:57:03.762Z"
   },
   "fx": {
-    "usdCny": 7.4354,
-    "date": "2026-09-12"
+    "usdCny": 6.7057,
+    "date": "2026-09-13"
   },
   "holdings": [
     { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 7.60 },
@@ -29,22 +29,23 @@
     { "name": "Broadcom Inc", "ticker": "AVGO", "weight": 2.81 }
   ],
   "history": [
-    { "date": "2026-09-01", "priceUsd": 198.20, "valueUsd": 792.80, "dailyPnlUsd": 0, "dailyPnlCny": 0, "cumulativePnlUsd": 32.80, "rate": 0 },
-    { "date": "2026-09-02", "priceUsd": 201.00, "valueUsd": 804.00, "dailyPnlUsd": 11.20, "dailyPnlCny": 80.42, "cumulativePnlUsd": 44.00, "rate": 1.41 },
-    { "date": "2026-09-03", "priceUsd": 199.60, "valueUsd": 798.40, "dailyPnlUsd": -5.60, "dailyPnlCny": -40.21, "cumulativePnlUsd": 38.40, "rate": -0.70 },
-    { "date": "2026-09-04", "priceUsd": 203.40, "valueUsd": 813.60, "dailyPnlUsd": 15.20, "dailyPnlCny": 109.14, "cumulativePnlUsd": 53.60, "rate": 1.90 },
-    { "date": "2026-09-05", "priceUsd": 204.10, "valueUsd": 816.40, "dailyPnlUsd": 2.80, "dailyPnlCny": 20.10, "cumulativePnlUsd": 56.40, "rate": 0.34 },
-    { "date": "2026-09-06", "priceUsd": 202.90, "valueUsd": 811.60, "dailyPnlUsd": -4.80, "dailyPnlCny": -34.46, "cumulativePnlUsd": 51.60, "rate": -0.59 },
-    { "date": "2026-09-07", "priceUsd": 205.10, "valueUsd": 820.40, "dailyPnlUsd": 8.80, "dailyPnlCny": 63.18, "cumulativePnlUsd": 60.40, "rate": 1.08 },
-    { "date": "2026-09-08", "priceUsd": 204.60, "valueUsd": 818.40, "dailyPnlUsd": -2.00, "dailyPnlCny": -14.36, "cumulativePnlUsd": 58.40, "rate": -0.24 },
-    { "date": "2026-09-09", "priceUsd": 205.42, "valueUsd": 821.68, "dailyPnlUsd": 3.28, "dailyPnlCny": 23.55, "cumulativePnlUsd": 61.68, "rate": 0.40 }
+    {
+      "date": "2026-09-12",
+      "priceUsd": 294.39,
+      "valueUsd": 1177.56,
+      "valueCny": 7896.364092,
+      "dailyPnlUsd": 0,
+      "dailyPnlCny": 0,
+      "cumulativePnlUsd": 71.04,
+      "rate": 0
+    }
   ],
   "drawdown": [
-    { "symbol": "QQQM", "high": 210.00, "current": 205.42 },
-    { "symbol": "NVDA", "high": 235.47, "current": 225.73 },
-    { "symbol": "MSFT", "high": 538.66, "current": 493.95 },
-    { "symbol": "GOOGL", "high": 402.38, "current": 338.36 },
-    { "symbol": "AMZN", "high": 274.99, "current": 256.97 }
+    { "symbol": "QQQM", "high": 294.39, "current": 294.39, "distance": 0, "progressPct": 100 },
+    { "symbol": "NVDA", "high": 235.47, "current": 218.29, "distance": 7.296, "progressPct": 92.704 },
+    { "symbol": "MSFT", "high": 538.66, "current": 495.63, "distance": 7.9883, "progressPct": 92.0117 },
+    { "symbol": "GOOGL", "high": 402.38, "current": 338.50, "distance": 15.8755, "progressPct": 84.1245 },
+    { "symbol": "AMZN", "high": 274.99, "current": 256.78, "distance": 6.6221, "progressPct": 93.3779 }
   ],
-  "updatedAt": "2026-09-09T12:00:00.000Z"
+  "updatedAt": "2026-09-12T09:57:03.762Z"
 }
