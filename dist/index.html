@@ -289,11 +289,11 @@
 
     <section class="account-list" aria-label="QQQM 持仓数据">
       <div class="account-row"><span class="account-label">代码</span><span class="account-value" id="symbolValue">QQQM</span></div>
-      <div class="account-row"><span class="account-label">持有</span><span class="account-value" id="sharesValue">4.0000</span></div>
-      <div class="account-row"><span class="account-label">成本</span><span class="account-value" id="costValue">$276.60</span></div>
-      <div class="account-row"><span class="account-label">现价</span><span class="account-value" id="priceValue">$294.39</span></div>
-      <div class="account-row"><span class="account-label">盈亏</span><span class="account-value" id="profitValue">+$71.16</span></div>
-      <div class="account-row"><span class="account-label">价值</span><span class="account-value" id="valueValue">¥7896.36</span></div>
+      <div class="account-row"><span class="account-label">持有</span><span class="account-value" id="sharesValue">0.0000</span></div>
+      <div class="account-row"><span class="account-label">成本</span><span class="account-value" id="costValue">$0.00</span></div>
+      <div class="account-row"><span class="account-label">现价</span><span class="account-value" id="priceValue">$0.00</span></div>
+      <div class="account-row"><span class="account-label">盈亏</span><span class="account-value" id="profitValue">+$0.00</span></div>
+      <div class="account-row"><span class="account-label">价值</span><span class="account-value" id="valueValue">¥0.00</span></div>
       <div class="account-row"><span class="account-label">最大回撤</span><span class="account-value" id="drawdownValue">$0.00</span></div>
     </section>
 
@@ -346,6 +346,8 @@
     let pullStartY = 0;
     let pullDistance = 0;
     let holdingObserver;
+    const numberAnimations = new WeakMap();
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const $ = (id) => document.getElementById(id);
     const money = (value) => `$${Number(value || 0).toFixed(2)}`;
@@ -358,6 +360,43 @@
       void element.offsetWidth;
       element.classList.add("is-animating");
       element.textContent = text;
+    }
+
+    function animateNumber(element, target, formatter, delay = 0) {
+      const safeTarget = Number.isFinite(Number(target)) ? Number(target) : 0;
+      const activeFrame = numberAnimations.get(element);
+      if (activeFrame) cancelAnimationFrame(activeFrame);
+
+      element.classList.remove("is-animating");
+      void element.offsetWidth;
+      element.classList.add("is-animating");
+
+      if (reducedMotion.matches) {
+        element.textContent = formatter(safeTarget);
+        return;
+      }
+
+      const duration = 1250;
+      let startTime;
+      element.textContent = formatter(0);
+
+      const tick = (now) => {
+        if (startTime === undefined) startTime = now + delay;
+        const progress = Math.min(1, Math.max(0, (now - startTime) / duration));
+        const eased = 1 - Math.pow(1 - progress, 4);
+        element.textContent = formatter(safeTarget * eased);
+
+        if (progress < 1) {
+          const frame = requestAnimationFrame(tick);
+          numberAnimations.set(element, frame);
+        } else {
+          element.textContent = formatter(safeTarget);
+          numberAnimations.delete(element);
+        }
+      };
+
+      const frame = requestAnimationFrame(tick);
+      numberAnimations.set(element, frame);
     }
 
     function historicalMaxDrawdown(history) {
@@ -381,13 +420,13 @@
       const valueCny = Number.isFinite(Number(state.valueCny)) ? Number(state.valueCny) : price * shares * fx;
       const maxDrawdown = Number.isFinite(Number(state.maxDrawdownUsd)) ? Number(state.maxDrawdownUsd) : historicalMaxDrawdown(state.history);
 
-      animateText($("symbolValue"), escapeHtml(state.symbol || "QQQM"));
-      animateText($("sharesValue"), shares.toFixed(4));
-      animateText($("costValue"), money(cost));
-      animateText($("priceValue"), money(price));
-      animateText($("profitValue"), signedMoney(profit));
-      animateText($("valueValue"), cny(valueCny));
-      animateText($("drawdownValue"), maxDrawdown < 0 ? signedMoney(maxDrawdown) : "$0.00");
+      animateText($("symbolValue"), state.symbol || "QQQM");
+      animateNumber($("sharesValue"), shares, (value) => value.toFixed(4), 80);
+      animateNumber($("costValue"), cost, money, 140);
+      animateNumber($("priceValue"), price, money, 200);
+      animateNumber($("profitValue"), profit, signedMoney, 260);
+      animateNumber($("valueValue"), valueCny, cny, 320);
+      animateNumber($("drawdownValue"), maxDrawdown, (value) => value < 0 ? signedMoney(value) : money(0), 380);
     }
 
     function renderHoldings() {
@@ -501,8 +540,6 @@
 
     bindPullToRefresh();
     bindScrollProgress();
-    renderAccount();
-    renderHoldings();
     refreshData();
     window.setInterval(refreshData, CONFIG.refreshMs);
   </script>
