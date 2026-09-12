@@ -56,6 +56,9 @@ data.quote = {
   timestamp: now
 };
 data.fx = { usdCny: Number(fx.rate), date: fx.date || date };
+data.costUsd = averageCostUsd;
+data.profitUsd = valueUsd - averageCostUsd * shares;
+data.valueCny = valueUsd * Number(fx.rate);
 data.history = [
   ...previousHistory,
   {
@@ -69,6 +72,16 @@ data.history = [
     rate: dailyRate
   }
 ].slice(-730);
+
+let peakValueUsd = -Infinity;
+let maxDrawdownUsd = 0;
+for (const item of data.history) {
+  const value = Number(item.valueUsd);
+  if (!Number.isFinite(value)) continue;
+  peakValueUsd = Math.max(peakValueUsd, value);
+  if (peakValueUsd > 0) maxDrawdownUsd = Math.min(maxDrawdownUsd, value - peakValueUsd);
+}
+data.maxDrawdownUsd = Number(maxDrawdownUsd.toFixed(2));
 
 if (Array.isArray(data.drawdown)) {
   for (const item of data.drawdown) {

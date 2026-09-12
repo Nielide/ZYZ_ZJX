@@ -4,160 +4,218 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
-  <meta name="description" content="QQQM 持仓、每日收益与历史回撤" />
+  <meta name="description" content="QQQM 持仓记录" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111111'/%3E%3Cpath d='M16 16h32v8H24v8h18v8H24v8h24v8H16z' fill='%23baff00'/%3E%3C/svg%3E" />
   <title>QQQM · ACCOUNTS</title>
   <style>
     :root {
-      --black: #000;
-      --surface: #111;
-      --surface-2: #171717;
-      --heading: #2a2a2a;
-      --muted: #686868;
-      --muted-deep: #444;
+      --black: #000000;
+      --surface: #111111;
+      --heading: #292929;
+      --text: #5f5f5f;
       --lime: #baff00;
-      --lime-soft: #8dbc00;
-      --blue: #5da7ff;
-      --red: #ff8585;
-      --green: #70f0a0;
-      --radius: 28px;
-      --pad: clamp(20px, 5.6vw, 34px);
+      --red: #ff6f73;
+      --radius: 999px;
+      --page-pad: clamp(24px, 5.6vw, 60px);
     }
+
     * { box-sizing: border-box; }
     html { background: var(--black); }
-    body { margin: 0; min-width: 320px; background: var(--black); color: var(--muted); font-family: Arial, Helvetica, sans-serif; line-height: 1.35; -webkit-font-smoothing: antialiased; overscroll-behavior-y: contain; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--black);
+      color: var(--text);
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+      overscroll-behavior-y: contain;
+    }
+
     button { font: inherit; }
-    .page { width: 100%; max-width: 1080px; margin: 0 auto; padding: 54px var(--pad) 76px; }
-    .page-title, .section-title { margin: 0; color: var(--heading); font-weight: 800; line-height: .83; letter-spacing: -.085em; text-transform: uppercase; }
-    .page-title { margin-bottom: 36px; font-size: clamp(3.45rem, 12.5vw, 8rem); }
-    .section-title { margin: 76px 0 28px 15px; font-size: clamp(3rem, 11vw, 7rem); }
-    .section-title.compact { margin: 28px 0 20px; font-size: clamp(1.65rem, 6vw, 3rem); letter-spacing: -.065em; }
+    .page {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: clamp(42px, 7vw, 74px) var(--page-pad) clamp(56px, 10vw, 112px);
+    }
 
-    .position-card { position: relative; display: grid; place-items: center; min-height: clamp(350px, 48vw, 570px); padding: 50px var(--pad) 34px; overflow: hidden; border-radius: var(--radius); background: var(--surface); }
-    .quote-pill { position: absolute; top: 28px; right: var(--pad); padding: 7px 16px 8px; border-radius: 999px; background: var(--black); color: var(--lime); font-size: clamp(1rem, 2.7vw, 1.55rem); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
-    .total-wrap { width: 100%; text-align: center; }
-    .total-value { display: inline-block; min-width: 3ch; color: var(--lime); font-size: clamp(4.3rem, 17vw, 11rem); font-weight: 800; line-height: .8; letter-spacing: -.105em; font-variant-numeric: tabular-nums; }
-    .total-value.is-animating { animation: value-pop .9s cubic-bezier(.2,.75,.25,1) both; }
-    @keyframes value-pop { 0% { opacity: .18; transform: translateY(16px) scale(.91); filter: blur(8px); } 58% { opacity: 1; transform: translateY(-3px) scale(1.025); filter: blur(0); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    .tag-row { display: flex; justify-content: flex-end; gap: 7px; width: 100%; margin-top: 66px; overflow-x: auto; scrollbar-width: none; }
-    .tag-row::-webkit-scrollbar { display: none; }
-    .tag { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 33px; padding: 6px 13px 7px; border-radius: 999px; background: var(--black); color: var(--muted); font-size: clamp(.73rem, 2.15vw, 1.22rem); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .tag.positive { color: var(--lime-soft); }
-    .tag.negative { color: var(--red); }
+    .page-title,
+    .section-title {
+      margin: 0;
+      color: var(--heading);
+      font-weight: 800;
+      line-height: .82;
+      letter-spacing: -.085em;
+      text-transform: uppercase;
+    }
 
-    .rows { display: grid; gap: 13px; }
-    .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; min-height: 66px; padding: 14px clamp(20px, 5vw, 55px); overflow: hidden; border-radius: 999px; background: var(--surface); }
-    .row-name { min-width: 0; overflow: hidden; color: var(--muted); font-size: clamp(.9rem, 3.65vw, 1.4rem); font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-    .row-ticker { margin-left: .45em; color: var(--muted-deep); font-size: .7em; font-weight: 600; }
-    .row-value { color: var(--muted); font-size: clamp(.88rem, 3.5vw, 1.28rem); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .row-value.positive { color: var(--green); }
-    .row-value.negative { color: var(--red); }
+    .page-title {
+      margin-left: clamp(8px, 1.3vw, 15px);
+      margin-bottom: clamp(34px, 6vw, 66px);
+      font-size: clamp(4rem, 12.5vw, 8rem);
+    }
 
-    .surface { padding: 18px; border-radius: var(--radius); background: var(--surface); }
-    .control-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 17px; }
-    .segmented { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2); }
-    .segmented button { border: 0; padding: 9px 12px; border-radius: 8px; color: var(--muted); background: transparent; font-size: .78rem; font-weight: 700; cursor: pointer; }
-    .segmented button.active { color: #f3f3f3; background: #292929; }
-    .metric-tabs button.active { color: var(--blue); }
-    .month-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 15px; }
-    .month-nav button { display: grid; place-items: center; width: 33px; height: 33px; border: 0; border-radius: 50%; color: var(--muted); background: var(--surface-2); cursor: pointer; }
-    .month-nav button:hover { color: var(--lime); }
-    .month-label { color: #e4e4e4; font-size: 1rem; font-weight: 700; }
-    .weekday-grid, .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 7px; }
-    .weekday { padding: 0 0 6px; color: var(--muted-deep); font-size: .62rem; font-weight: 700; text-align: center; text-transform: uppercase; }
-    .calendar-cell { min-height: 57px; padding: 7px 4px; border-radius: 11px; background: #202020; color: var(--muted); font-size: .66rem; text-align: center; }
-    .calendar-cell .day { display: block; color: #777; font-weight: 700; }
-    .calendar-cell .day-value { display: block; margin-top: 8px; font-size: .73rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .calendar-cell.positive { background: rgba(47, 94, 66, .46); color: var(--green); }
-    .calendar-cell.negative { background: rgba(93, 47, 52, .52); color: var(--red); }
-    .calendar-cell.positive .day-value, .calendar-cell.negative .day-value { color: inherit; }
-    .calendar-cell.empty { visibility: hidden; }
+    .account-list,
+    .holdings-list {
+      display: grid;
+      gap: clamp(12px, 1.7vw, 18px);
+    }
 
-    .year-panel { display: grid; gap: 14px; }
-    .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
-    .metric-card { min-width: 0; padding: 16px 10px; border-radius: 11px; background: var(--surface-2); text-align: center; }
-    .metric-card span { display: block; color: #888; font-size: .62rem; text-transform: uppercase; }
-    .metric-card strong { display: block; margin-top: 8px; color: #f4f4f4; font-size: clamp(1rem, 4vw, 1.45rem); font-variant-numeric: tabular-nums; }
-    .metric-card strong.positive { color: var(--green); }
-    .metric-card strong.negative { color: var(--red); }
-    .curve { display: block; width: 100%; height: 180px; margin-top: 4px; overflow: visible; }
-    .curve-grid { stroke: #292929; stroke-width: 1; }
-    .curve-line { fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .curve-dot { fill: var(--blue); }
-    .curve-label { fill: #707070; font-size: 12px; }
+    .account-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+      align-items: center;
+      gap: 14px;
+      min-height: clamp(76px, 14.8vw, 160px);
+      padding: clamp(16px, 3.6vw, 38px) clamp(24px, 5.7vw, 62px);
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
 
-    .drawdown-row { display: grid; gap: 8px; padding: 17px 22px; border-radius: 22px; background: var(--surface); }
-    .drawdown-top { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: center; }
-    .drawdown-symbol { color: #e5e5e5; font-size: .9rem; font-weight: 800; }
-    .drawdown-current, .drawdown-distance { color: var(--muted); font-size: .78rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .drawdown-distance { color: var(--red); font-weight: 700; }
-    .bar { height: 6px; overflow: hidden; border-radius: 999px; background: #2a2a2a; }
-    .bar i { display: block; height: 100%; border-radius: inherit; background: var(--lime); }
-    .drawdown-note { color: var(--muted-deep); font-size: .7rem; }
-    .source-line { margin: 26px 0 0; color: var(--muted-deep); font-size: .68rem; text-align: right; }
+    .account-label,
+    .account-value {
+      color: var(--lime);
+      font-size: clamp(1.55rem, 5.6vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.065em;
+    }
 
-    .pull-refresh { position: fixed; z-index: 5; top: -48px; left: 50%; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 999px; color: var(--muted); background: #181818; font-size: .72rem; font-weight: 700; transform: translateX(-50%); transition: top .2s ease, opacity .2s ease; opacity: 0; }
+    .account-label { white-space: nowrap; }
+    .account-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      letter-spacing: -.07em;
+    }
+
+    .account-value.is-animating {
+      animation: value-in .85s cubic-bezier(.2, .75, .25, 1) both;
+    }
+
+    @keyframes value-in {
+      0% { opacity: .08; transform: translateY(14px) scale(.92); filter: blur(7px); }
+      60% { opacity: 1; transform: translateY(-2px) scale(1.03); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .section-title {
+      margin: clamp(74px, 10vw, 112px) 0 clamp(24px, 4vw, 42px) clamp(8px, 1.3vw, 15px);
+      font-size: clamp(3.75rem, 11.5vw, 7.35rem);
+    }
+
+    .holding-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-height: clamp(46px, 7.4vw, 80px);
+      padding: 12px clamp(24px, 5.7vw, 62px);
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .holding-name,
+    .holding-weight {
+      overflow: hidden;
+      color: var(--text);
+      font-size: clamp(1rem, 3.25vw, 2.18rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .holding-weight {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer-name {
+      margin: clamp(84px, 12vw, 140px) 0 0;
+      color: var(--lime);
+      font-size: clamp(1.85rem, 5.3vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.08em;
+      text-align: center;
+    }
+
+    .data-status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .pull-refresh {
+      position: fixed;
+      z-index: 2;
+      top: -52px;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 15px;
+      border-radius: 999px;
+      background: #181818;
+      color: var(--text);
+      font-size: .75rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateX(-50%);
+      transition: top .2s ease, opacity .2s ease;
+    }
+
     .pull-refresh.visible { top: 12px; opacity: 1; }
     .pull-refresh.loading .pull-arrow { animation: spin .8s linear infinite; }
     .pull-arrow { color: var(--lime); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 
-    @media (max-width: 390px) {
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+
+    @media (max-width: 370px) {
       .page { padding-left: 20px; padding-right: 20px; }
-      .position-card { padding-left: 20px; padding-right: 20px; }
-      .tag { padding-left: 10px; padding-right: 10px; }
-      .surface { padding: 13px; }
-      .segmented button { padding-left: 9px; padding-right: 9px; }
-      .metric-grid { gap: 6px; }
-      .metric-card { padding-left: 6px; padding-right: 6px; }
+      .account-row, .holding-row { padding-left: 20px; padding-right: 20px; }
+      .account-row { gap: 8px; }
+      .account-label, .account-value { font-size: 1.42rem; }
+      .holding-name, .holding-weight { font-size: .93rem; }
     }
   </style>
 </head>
 <body>
   <div class="pull-refresh" id="pullRefresh" aria-hidden="true"><span class="pull-arrow" id="pullArrow">↓</span><span id="pullText">PULL TO REFRESH</span></div>
+
   <main class="page">
     <h1 class="page-title">ACCOUNTS</h1>
 
-    <section class="position-card" aria-labelledby="position-title">
-      <div class="quote-pill" id="quotePrice">$205.42</div>
-      <h2 id="position-title" class="sr-only">QQQM 当前人民币市值</h2>
-      <div class="total-wrap"><div class="total-value" id="marketValueCny" aria-live="polite">5898.90</div></div>
-      <div class="tag-row" aria-label="QQQM 持仓摘要">
-        <span class="tag">QQQM</span>
-        <span class="tag" id="sharesTag">4.0000</span>
-        <span class="tag" id="priceTag">$205.42</span>
-        <span class="tag" id="fxTag">7.1800</span>
-        <span class="tag positive" id="profitTag">P/L +$61.68</span>
-      </div>
+    <section class="account-list" aria-label="QQQM 持仓数据">
+      <div class="account-row"><span class="account-label">代码</span><span class="account-value" id="symbolValue">QQQM</span></div>
+      <div class="account-row"><span class="account-label">持有</span><span class="account-value" id="sharesValue">4.0000</span></div>
+      <div class="account-row"><span class="account-label">成本</span><span class="account-value" id="costValue">$276.63</span></div>
+      <div class="account-row"><span class="account-label">现价</span><span class="account-value" id="priceValue">$294.69</span></div>
+      <div class="account-row"><span class="account-label">盈亏</span><span class="account-value" id="profitValue">+$56.63</span></div>
+      <div class="account-row"><span class="account-label">价值</span><span class="account-value" id="valueValue">¥8762.63</span></div>
+      <div class="account-row"><span class="account-label">最大回撤</span><span class="account-value" id="drawdownValue">−$62.63</span></div>
     </section>
 
     <section aria-labelledby="holdings-heading">
       <h2 class="section-title" id="holdings-heading">HOLDINGS</h2>
-      <div class="rows" id="holdingsList"></div>
+      <div class="holdings-list" id="holdingsList"></div>
     </section>
 
-    <section aria-labelledby="performance-heading">
-      <h2 class="section-title" id="performance-heading">PERFORMANCE</h2>
-      <div class="surface">
-        <div class="control-line">
-          <div class="segmented view-tabs" role="tablist" aria-label="收益视图"><button class="active" data-view="daily" type="button">Daily View</button><button data-view="yearly" type="button">Yearly View</button></div>
-          <div class="segmented metric-tabs" role="tablist" aria-label="指标"><button class="active" data-metric="pl" type="button">P/L</button><button data-metric="rate" type="button">Rate</button><button data-metric="total" type="button">Total</button></div>
-        </div>
-        <div id="dailyView">
-          <div class="month-nav"><button id="prevMonth" type="button" aria-label="上个月">‹</button><div class="month-label" id="monthLabel">Sep 2026</div><button id="nextMonth" type="button" aria-label="下个月">›</button></div>
-          <div class="weekday-grid"><div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div><div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div></div>
-          <div class="calendar-grid" id="calendarGrid"></div>
-        </div>
-        <div class="year-panel" id="yearlyView" hidden></div>
-      </div>
-    </section>
-
-    <section aria-labelledby="drawdown-heading">
-      <h2 class="section-title" id="drawdown-heading">DRAWDOWN</h2>
-      <div class="rows" id="drawdownList"></div>
-    </section>
-
-    <p class="source-line" id="updatedAt">DATA — LOADING</p>
+    <p class="footer-name">朱莹筑&amp;朱侯锡</p>
+    <p class="data-status" id="dataStatus" aria-live="polite">DATA — LOADING</p>
   </main>
 
   <script>
@@ -169,156 +227,84 @@
     };
 
     const FALLBACK_DATA = {
-      symbol: "QQQM", shares: 4, averageCostUsd: 190,
-      quote: { price: 205.42, change: 4.88, changePercent: 2.43 },
-      fx: { usdCny: 7.18, date: "2026-09-09" },
+      symbol: "QQQM",
+      shares: 4,
+      costUsd: 276.63,
+      profitUsd: 56.63,
+      valueCny: 8762.63,
+      maxDrawdownUsd: -62.63,
+      averageCostUsd: 276.63,
+      quote: { price: 294.69, change: 0, changePercent: 0 },
+      fx: { usdCny: 7.4354, date: "2026-09-12" },
       holdings: [
-        { name: "NVIDIA Corp", ticker: "NVDA", weight: 7.60 }, { name: "Apple Inc", ticker: "AAPL", weight: 6.67 },
-        { name: "Alphabet Inc", ticker: "GOOGL / GOOG", weight: 6.29 }, { name: "Micron Technology Inc", ticker: "MU", weight: 5.64 },
-        { name: "Microsoft Corp", ticker: "MSFT", weight: 4.35 }, { name: "Advanced Micro Devices Inc", ticker: "AMD", weight: 4.11 },
-        { name: "Amazon.com Inc", ticker: "AMZN", weight: 4.03 }, { name: "Tesla Inc", ticker: "TSLA", weight: 3.30 },
-        { name: "Intel Corp", ticker: "INTC", weight: 3.04 }, { name: "Broadcom Inc", ticker: "AVGO", weight: 2.81 }
+        { name: "NVIDIA Corp", ticker: "NVDA", weight: 7.60 },
+        { name: "Apple Inc", ticker: "AAPL", weight: 6.67 },
+        { name: "Alphabet Inc", ticker: "GOOGL / GOOG", weight: 6.29 },
+        { name: "Micron Technology Inc", ticker: "MU", weight: 5.64 },
+        { name: "Microsoft Corp", ticker: "MSFT", weight: 4.35 },
+        { name: "Advanced Micro Devices Inc", ticker: "AMD", weight: 4.11 },
+        { name: "Amazon.com Inc", ticker: "AMZN", weight: 4.03 },
+        { name: "Tesla Inc", ticker: "TSLA", weight: 3.30 },
+        { name: "Intel Corp", ticker: "INTC", weight: 3.04 },
+        { name: "Broadcom Inc", ticker: "AVGO", weight: 2.81 }
       ],
-      history: [
-        { date: "2026-09-01", priceUsd: 198.20, valueUsd: 792.80, dailyPnlUsd: 0, dailyPnlCny: 0, cumulativePnlUsd: 32.80, rate: 0 },
-        { date: "2026-09-02", priceUsd: 201.00, valueUsd: 804.00, dailyPnlUsd: 11.20, dailyPnlCny: 80.42, cumulativePnlUsd: 44.00, rate: 1.41 },
-        { date: "2026-09-03", priceUsd: 199.60, valueUsd: 798.40, dailyPnlUsd: -5.60, dailyPnlCny: -40.21, cumulativePnlUsd: 38.40, rate: -0.70 },
-        { date: "2026-09-04", priceUsd: 203.40, valueUsd: 813.60, dailyPnlUsd: 15.20, dailyPnlCny: 109.14, cumulativePnlUsd: 53.60, rate: 1.90 },
-        { date: "2026-09-05", priceUsd: 204.10, valueUsd: 816.40, dailyPnlUsd: 2.80, dailyPnlCny: 20.10, cumulativePnlUsd: 56.40, rate: .34 },
-        { date: "2026-09-06", priceUsd: 202.90, valueUsd: 811.60, dailyPnlUsd: -4.80, dailyPnlCny: -34.46, cumulativePnlUsd: 51.60, rate: -.59 },
-        { date: "2026-09-07", priceUsd: 205.10, valueUsd: 820.40, dailyPnlUsd: 8.80, dailyPnlCny: 63.18, cumulativePnlUsd: 60.40, rate: 1.08 },
-        { date: "2026-09-08", priceUsd: 204.60, valueUsd: 818.40, dailyPnlUsd: -2.00, dailyPnlCny: -14.36, cumulativePnlUsd: 58.40, rate: -.24 },
-        { date: "2026-09-09", priceUsd: 205.42, valueUsd: 821.68, dailyPnlUsd: 3.28, dailyPnlCny: 23.55, cumulativePnlUsd: 61.68, rate: .40 }
-      ],
-      drawdown: [
-        { symbol: "QQQM", high: 210.00, current: 205.42 }, { symbol: "NVDA", high: 235.47, current: 225.73 },
-        { symbol: "MSFT", high: 538.66, current: 493.95 }, { symbol: "GOOGL", high: 402.38, current: 338.36 },
-        { symbol: "AMZN", high: 274.99, current: 256.97 }
-      ],
-      updatedAt: "2026-09-09T12:00:00.000Z"
+      history: []
     };
 
     let state = FALLBACK_DATA;
-    let selectedView = "daily";
-    let selectedMetric = "pl";
-    let selectedMonth = "2026-09";
+    let isRefreshing = false;
     let pullStartY = 0;
     let pullDistance = 0;
-    let isRefreshing = false;
 
     const $ = (id) => document.getElementById(id);
-    const money = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(n);
-    const number = (n) => Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const signedMoney = (n) => `${n >= 0 ? "+" : "−"}${money(Math.abs(n))}`;
-    const signedNumber = (n) => `${n >= 0 ? "+" : "−"}${number(Math.abs(n))}`;
-    const formatDate = (value) => value.replace(/^(\d{4})-(\d{2})-(\d{2})$/, "$1.$2.$3");
+    const money = (value) => `$${Number(value || 0).toFixed(2)}`;
+    const signedMoney = (value) => `${Number(value || 0) >= 0 ? "+" : "−"}${money(Math.abs(Number(value || 0)))}`;
+    const cny = (value) => `¥${Number(value || 0).toFixed(2)}`;
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
 
-    function animateNumber(element, target) {
-      const from = Number(element.dataset.value || 0);
-      const started = performance.now();
-      const duration = 900;
+    function animateText(element, text) {
       element.classList.remove("is-animating");
       void element.offsetWidth;
       element.classList.add("is-animating");
-      function frame(now) {
-        const progress = Math.min(1, (now - started) / duration);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        element.textContent = number(from + (target - from) * eased);
-        if (progress < 1) requestAnimationFrame(frame);
-        else { element.textContent = number(target); element.dataset.value = String(target); }
-      }
-      requestAnimationFrame(frame);
+      element.textContent = text;
     }
 
-    function renderPosition() {
-      const price = Number(state.quote.price || 0);
+    function historicalMaxDrawdown(history) {
+      let peak = -Infinity;
+      let maxDrawdown = 0;
+      for (const item of history || []) {
+        const value = Number(item.valueUsd);
+        if (!Number.isFinite(value)) continue;
+        peak = Math.max(peak, value);
+        if (peak > 0) maxDrawdown = Math.min(maxDrawdown, value - peak);
+      }
+      return maxDrawdown;
+    }
+
+    function renderAccount() {
       const shares = Number(state.shares || 0);
-      const fx = Number(state.fx.usdCny || 0);
-      const valueUsd = price * shares;
-      const costUsd = Number(state.averageCostUsd || 0) * shares;
-      const profit = valueUsd - costUsd;
-      animateNumber($("marketValueCny"), valueUsd * fx);
-      $("quotePrice").textContent = money(price);
-      $("sharesTag").textContent = shares.toFixed(4);
-      $("priceTag").textContent = money(price);
-      $("fxTag").textContent = fx.toFixed(4);
-      $("profitTag").textContent = `P/L ${signedMoney(profit)}`;
-      $("profitTag").classList.toggle("positive", profit >= 0);
-      $("profitTag").classList.toggle("negative", profit < 0);
+      const price = Number(state.quote?.price || 0);
+      const fx = Number(state.fx?.usdCny || 0);
+      const cost = Number.isFinite(Number(state.costUsd)) ? Number(state.costUsd) : Number(state.averageCostUsd || 0);
+      const profit = Number.isFinite(Number(state.profitUsd)) ? Number(state.profitUsd) : price * shares - Number(state.averageCostUsd || 0) * shares;
+      const valueCny = Number.isFinite(Number(state.valueCny)) ? Number(state.valueCny) : price * shares * fx;
+      const maxDrawdown = Number.isFinite(Number(state.maxDrawdownUsd)) ? Number(state.maxDrawdownUsd) : historicalMaxDrawdown(state.history);
+
+      animateText($("symbolValue"), escapeHtml(state.symbol || "QQQM"));
+      animateText($("sharesValue"), shares.toFixed(4));
+      animateText($("costValue"), money(cost));
+      animateText($("priceValue"), money(price));
+      animateText($("profitValue"), signedMoney(profit));
+      animateText($("valueValue"), cny(valueCny));
+      animateText($("drawdownValue"), signedMoney(maxDrawdown));
     }
 
     function renderHoldings() {
       $("holdingsList").innerHTML = (state.holdings || []).slice(0, 10).map((item) => `
-        <div class="row"><div class="row-name">${item.name}<span class="row-ticker">${item.ticker}</span></div><div class="row-value">${Number(item.weight).toFixed(2)}%</div></div>`).join("");
-    }
-
-    function renderDrawdown() {
-      $("drawdownList").innerHTML = (state.drawdown || []).map((item) => {
-        const high = Number(item.high || 0);
-        const current = Number(item.current || 0);
-        const distance = high ? Math.max(0, (high - current) / high * 100) : 0;
-        const progress = Math.max(0, Math.min(100, 100 - distance));
-        return `<div class="drawdown-row"><div class="drawdown-top"><span class="drawdown-symbol">${item.symbol}</span><span class="drawdown-current">${current.toFixed(2)}</span><span class="drawdown-distance">−${distance.toFixed(2)}%</span></div><div class="bar"><i style="width:${progress.toFixed(1)}%"></i></div><div class="drawdown-note">HIGH ${high.toFixed(2)} · ${progress.toFixed(0)}% from peak</div></div>`;
-      }).join("");
-    }
-
-    function metricValue(record) {
-      if (selectedMetric === "rate") return `${record.rate >= 0 ? "+" : "−"}${Math.abs(Number(record.rate || 0)).toFixed(2)}%`;
-      if (selectedMetric === "total") return `¥${number(record.valueCny || record.valueUsd * state.fx.usdCny)}`;
-      return signedNumber(Number(record.dailyPnlUsd || 0));
-    }
-
-    function renderCalendar() {
-      const [year, month] = selectedMonth.split("-").map(Number);
-      const firstDay = new Date(year, month - 1, 1).getDay();
-      const daysInMonth = new Date(year, month, 0).getDate();
-      const history = new Map((state.history || []).map((item) => [item.date, item]));
-      const cells = [];
-      for (let i = 0; i < firstDay; i++) cells.push(`<div class="calendar-cell empty"></div>`);
-      for (let day = 1; day <= daysInMonth; day++) {
-        const key = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        const record = history.get(key);
-        const value = record ? metricValue(record) : "";
-        const tone = record ? (Number(record.dailyPnlUsd || 0) > 0 ? "positive" : Number(record.dailyPnlUsd || 0) < 0 ? "negative" : "") : "";
-        cells.push(`<div class="calendar-cell ${tone}"><span class="day">${day}</span>${record ? `<span class="day-value">${value}</span>` : ""}</div>`);
-      }
-      $("calendarGrid").innerHTML = cells.join("");
-      $("monthLabel").textContent = new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" }).format(new Date(year, month - 1, 1));
-    }
-
-    function calcStats(history) {
-      if (!history.length) return { period: 0, maxDrawdown: 0, vol: 0 };
-      const first = Number(history[0].valueUsd || 0);
-      const last = Number(history[history.length - 1].valueUsd || 0);
-      let peak = first;
-      let maxDrawdown = 0;
-      history.forEach((item) => { const value = Number(item.valueUsd || 0); peak = Math.max(peak, value); maxDrawdown = Math.min(maxDrawdown, peak ? (value - peak) / peak * 100 : 0); });
-      const rates = history.map((item) => Number(item.rate || 0));
-      const avg = rates.reduce((sum, item) => sum + item, 0) / Math.max(1, rates.length);
-      const variance = rates.reduce((sum, item) => sum + Math.pow(item - avg, 2), 0) / Math.max(1, rates.length);
-      return { period: first ? (last - first) / first * 100 : 0, maxDrawdown, vol: Math.sqrt(variance) * Math.sqrt(252) };
-    }
-
-    function renderCurve(history) {
-      const values = history.map((item) => Number(item.valueCny || item.valueUsd * state.fx.usdCny || 0));
-      if (!values.length) return "";
-      const min = Math.min(...values), max = Math.max(...values), range = Math.max(1, max - min);
-      const points = values.map((value, index) => `${(index / Math.max(1, values.length - 1) * 1000).toFixed(1)},${(170 - (value - min) / range * 140).toFixed(1)}`).join(" ");
-      return `<svg class="curve" viewBox="0 0 1000 190" preserveAspectRatio="none" role="img" aria-label="净值曲线"><line class="curve-grid" x1="0" y1="30" x2="1000" y2="30"/><line class="curve-grid" x1="0" y1="95" x2="1000" y2="95"/><line class="curve-grid" x1="0" y1="170" x2="1000" y2="170"/><polyline class="curve-line" points="${points}"/><circle class="curve-dot" cx="${points.split(" ").at(-1).split(",")[0]}" cy="${points.split(" ").at(-1).split(",")[1]}" r="5"/></svg>`;
-    }
-
-    function renderYearly() {
-      const history = state.history || [];
-      const stats = calcStats(history);
-      $("yearlyView").innerHTML = `<div class="metric-grid"><div class="metric-card"><span>Period Return</span><strong class="${stats.period >= 0 ? "positive" : "negative"}">${stats.period >= 0 ? "+" : "−"}${Math.abs(stats.period).toFixed(2)}%</strong></div><div class="metric-card"><span>Max Drawdown</span><strong class="negative">−${Math.abs(stats.maxDrawdown).toFixed(2)}%</strong></div><div class="metric-card"><span>Annualized Vol</span><strong>${stats.vol.toFixed(2)}%</strong></div></div><h3 class="section-title compact">NET WORTH CURVE</h3>${renderCurve(history)}`;
-    }
-
-    function renderPerformance() {
-      $("dailyView").hidden = selectedView !== "daily";
-      $("yearlyView").hidden = selectedView !== "yearly";
-      document.querySelectorAll("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === selectedView));
-      document.querySelectorAll("[data-metric]").forEach((button) => button.classList.toggle("active", button.dataset.metric === selectedMetric));
-      if (selectedView === "daily") renderCalendar(); else renderYearly();
+        <div class="holding-row">
+          <span class="holding-name">${escapeHtml(item.name)}</span>
+          <span class="holding-weight">${Number(item.weight || 0).toFixed(2)}%</span>
+        </div>`).join("");
     }
 
     async function fetchRuntimeData() {
@@ -331,46 +317,66 @@
       const response = await fetch(`${CONFIG.fxEndpoint}?t=${Date.now()}`, { cache: "no-store" });
       if (!response.ok) throw new Error(`fx ${response.status}`);
       const result = await response.json();
-      if (Number.isFinite(result.rate)) state.fx.usdCny = result.rate;
+      if (Number.isFinite(Number(result.rate))) state.fx = { ...(state.fx || {}), usdCny: Number(result.rate), date: result.date || state.fx?.date };
     }
 
-    async function refreshData({ animate = true } = {}) {
+    async function refreshData() {
       if (isRefreshing) return;
       isRefreshing = true;
       try {
         const next = await fetchRuntimeData();
         state = { ...FALLBACK_DATA, ...next, quote: { ...FALLBACK_DATA.quote, ...(next.quote || {}) }, fx: { ...FALLBACK_DATA.fx, ...(next.fx || {}) } };
-        try { await refreshFx(); } catch (error) { /* keep workflow-saved FX */ }
+        try { await refreshFx(); } catch (error) { /* workflow-saved FX remains available */ }
         if (CONFIG.runtimeQuoteEndpoint) {
-          try { const response = await fetch(`${CONFIG.runtimeQuoteEndpoint}?symbol=${state.symbol}&t=${Date.now()}`, { cache: "no-store" }); const quote = await response.json(); if (Number.isFinite(quote.c)) state.quote = { ...state.quote, price: quote.c, change: quote.d || 0, changePercent: quote.dp || 0 }; } catch (error) { /* static workflow data remains valid */ }
+          try {
+            const response = await fetch(`${CONFIG.runtimeQuoteEndpoint}?symbol=${encodeURIComponent(state.symbol)}&t=${Date.now()}`, { cache: "no-store" });
+            const quote = await response.json();
+            if (Number.isFinite(Number(quote.c))) state.quote = { ...state.quote, price: Number(quote.c), change: Number(quote.d || 0), changePercent: Number(quote.dp || 0) };
+          } catch (error) { /* static workflow data remains valid */ }
         }
-      } catch (error) { /* fallback data remains visible */ }
-      renderPosition(); renderHoldings(); renderPerformance(); renderDrawdown();
-      $("updatedAt").textContent = `DATA — ${new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit" }).format(new Date())}`;
-      if (!animate) $("marketValueCny").classList.remove("is-animating");
+      } catch (error) {
+        /* The embedded design snapshot remains visible when opened without a server. */
+      }
+      renderAccount();
+      renderHoldings();
+      $("dataStatus").textContent = `DATA — ${new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit" }).format(new Date())}`;
       isRefreshing = false;
-    }
-
-    function bindControls() {
-      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { selectedView = button.dataset.view; renderPerformance(); }));
-      document.querySelectorAll("[data-metric]").forEach((button) => button.addEventListener("click", () => { selectedMetric = button.dataset.metric; renderPerformance(); }));
-      $("prevMonth").addEventListener("click", () => { const date = new Date(`${selectedMonth}-01T00:00:00`); date.setMonth(date.getMonth() - 1); selectedMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`; renderCalendar(); });
-      $("nextMonth").addEventListener("click", () => { const date = new Date(`${selectedMonth}-01T00:00:00`); date.setMonth(date.getMonth() + 1); selectedMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`; renderCalendar(); });
     }
 
     function bindPullToRefresh() {
       const indicator = $("pullRefresh");
       document.addEventListener("touchstart", (event) => { if (window.scrollY <= 2 && !isRefreshing) pullStartY = event.touches[0].clientY; }, { passive: true });
-      document.addEventListener("touchmove", (event) => { if (!pullStartY || window.scrollY > 2 || isRefreshing) return; pullDistance = Math.max(0, Math.min(100, event.touches[0].clientY - pullStartY)); if (pullDistance > 8) { indicator.classList.add("visible"); indicator.style.top = `${Math.min(12 + pullDistance * .38, 48)}px`; $("pullText").textContent = pullDistance > 70 ? "RELEASE TO REFRESH" : "PULL TO REFRESH"; $("pullArrow").style.transform = `rotate(${pullDistance > 70 ? 180 : 0}deg)`; } }, { passive: true });
-      document.addEventListener("touchend", async () => { if (!pullStartY) return; const shouldRefresh = pullDistance > 70; pullStartY = 0; pullDistance = 0; if (shouldRefresh) { indicator.classList.add("loading"); $("pullText").textContent = "UPDATING"; await refreshData({ animate: true }); } indicator.classList.remove("visible", "loading"); indicator.style.top = ""; $("pullArrow").style.transform = ""; }, { passive: true });
+      document.addEventListener("touchmove", (event) => {
+        if (!pullStartY || window.scrollY > 2 || isRefreshing) return;
+        pullDistance = Math.max(0, Math.min(100, event.touches[0].clientY - pullStartY));
+        if (pullDistance > 8) {
+          indicator.classList.add("visible");
+          indicator.style.top = `${Math.min(12 + pullDistance * .38, 48)}px`;
+          $("pullText").textContent = pullDistance > 70 ? "RELEASE TO REFRESH" : "PULL TO REFRESH";
+          $("pullArrow").style.transform = `rotate(${pullDistance > 70 ? 180 : 0}deg)`;
+        }
+      }, { passive: true });
+      document.addEventListener("touchend", async () => {
+        if (!pullStartY) return;
+        const shouldRefresh = pullDistance > 70;
+        pullStartY = 0;
+        pullDistance = 0;
+        if (shouldRefresh) {
+          indicator.classList.add("loading");
+          $("pullText").textContent = "UPDATING";
+          await refreshData();
+        }
+        indicator.classList.remove("visible", "loading");
+        indicator.style.top = "";
+        $("pullArrow").style.transform = "";
+      }, { passive: true });
     }
 
-    state.history.length && (selectedMonth = state.history.at(-1).date.slice(0, 7));
-    bindControls();
     bindPullToRefresh();
-    renderPosition(); renderHoldings(); renderPerformance(); renderDrawdown();
-    refreshData({ animate: true });
-    window.setInterval(() => refreshData({ animate: true }), CONFIG.refreshMs);
+    renderAccount();
+    renderHoldings();
+    refreshData();
+    window.setInterval(refreshData, CONFIG.refreshMs);
   </script>
 </body>
 </html>

@@ -1,16 +1,20 @@
 {
   "symbol": "QQQM",
   "shares": 4,
-  "averageCostUsd": 190,
+  "averageCostUsd": 276.63,
+  "costUsd": 276.63,
+  "profitUsd": 56.63,
+  "valueCny": 8762.63,
+  "maxDrawdownUsd": -62.63,
   "quote": {
-    "price": 205.42,
-    "change": 4.88,
-    "changePercent": 2.43,
+    "price": 294.69,
+    "change": 0,
+    "changePercent": 0,
     "timestamp": "2026-09-09T12:00:00.000Z"
   },
   "fx": {
-    "usdCny": 7.18,
-    "date": "2026-09-09"
+    "usdCny": 7.4354,
+    "date": "2026-09-12"
   },
   "holdings": [
     { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 7.60 },
