@@ -1,5 +1,7 @@
 const GITHUB_RAW_ORIGIN = "https://raw.githubusercontent.com/Nielide/ZYZ_ZJX/main";
-const EDGE_TTL_SECONDS = 60;
+const GITHUB_CONTENTS_API =
+  "https://api.github.com/repos/Nielide/ZYZ_ZJX/contents/index.html?ref=main";
+const EDGE_TTL_SECONDS = 120;
 
 function getRepositoryPath(pathname) {
   if (pathname === "/") return "/index.html";
@@ -37,14 +39,16 @@ function getContentType(pathname, upstreamType) {
 
 async function serveLatestRepositoryFile(request, env, pathname) {
   try {
-    // The minute bucket bypasses stale raw.githubusercontent.com objects after a push.
-    const minuteBucket = Math.floor(Date.now() / (EDGE_TTL_SECONDS * 1000));
-    const originUrl = `${GITHUB_RAW_ORIGIN}${pathname}?v=${minuteBucket}`;
+    const isHtml = pathname === "/index.html";
+    const originUrl = isHtml ? GITHUB_CONTENTS_API : `${GITHUB_RAW_ORIGIN}${pathname}`;
     const response = await fetch(originUrl, {
       headers: {
-        Accept: pathname.endsWith(".json")
-          ? "application/json"
-          : "text/html,application/octet-stream;q=0.9,*/*;q=0.8"
+        Accept: isHtml
+          ? "application/vnd.github.raw+json"
+          : pathname.endsWith(".json")
+            ? "application/json"
+            : "application/octet-stream,*/*;q=0.8",
+        "User-Agent": "qqqm-cloudflare-worker"
       },
       cf: { cacheEverything: true, cacheTtl: EDGE_TTL_SECONDS }
     });
@@ -66,7 +70,7 @@ async function serveLatestRepositoryFile(request, env, pathname) {
         : "public, max-age=0, must-revalidate"
     );
     headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("X-QQQM-Source", "github-main");
+    headers.set("X-QQQM-Source", isHtml ? "github-api" : "github-raw");
 
     return new Response(request.method === "HEAD" ? null : body, {
       status: response.status,
