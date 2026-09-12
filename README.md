@@ -27,6 +27,8 @@
 
 每日工作流会同时更新 `data/data.json` 和 `dist/data/data.json`，因此 GitHub Pages 与 Cloudflare Pages 会使用同一份最新数据。
 
+当前自定义域名部署使用 Cloudflare Workers Static Assets。`qqqm.hedh8899.top` 直接提供 `dist` 中的网页，Worker 代替浏览器读取 GitHub 定时生成的最新 JSON；即使访客网络无法访问 GitHub，也不会影响打开网页或读取已缓存的数据。
+
 ## 数据说明
 
 当前项目初始 JSON 中的历史值是界面演示快照。Actions 会在工作日自动写入真实行情历史；网页端每 5 分钟重新读取数据并刷新价格与汇率，下拉页面超过阈值会触发同样的刷新动画。
