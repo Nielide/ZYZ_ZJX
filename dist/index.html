@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="QQQM 持仓记录" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&amp;family=Noto+Sans+SC:wght@800;900&amp;display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111111'/%3E%3Cpath d='M16 16h32v8H24v8h18v8H24v8h24v8H16z' fill='%23baff00'/%3E%3C/svg%3E" />
   <title>QQQM · ACCOUNTS</title>
   <style>
@@ -17,6 +20,7 @@
       --red: #ff6f73;
       --radius: 999px;
       --page-pad: clamp(24px, 5.6vw, 60px);
+      --font: "Montserrat", "Noto Sans SC", Arial, "Microsoft YaHei", sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -26,10 +30,23 @@
       margin: 0;
       background: var(--black);
       color: var(--text);
-      font-family: Arial, "Microsoft YaHei", sans-serif;
+      font-family: var(--font);
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
       overscroll-behavior-y: contain;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      z-index: 8;
+      inset: 0 0 auto;
+      height: 3px;
+      background: var(--lime);
+      box-shadow: 0 0 18px rgba(186, 255, 0, .7);
+      pointer-events: none;
+      transform: scaleX(0);
+      transform-origin: left center;
+      will-change: transform;
     }
 
     button { font: inherit; }
@@ -44,7 +61,7 @@
     .section-title {
       margin: 0;
       color: var(--heading);
-      font-weight: 800;
+      font-weight: 900;
       line-height: .82;
       letter-spacing: -.085em;
       text-transform: uppercase;
@@ -54,6 +71,7 @@
       margin-left: clamp(8px, 1.3vw, 15px);
       margin-bottom: clamp(34px, 6vw, 66px);
       font-size: clamp(4rem, 12.5vw, 8rem);
+      animation: title-in .9s cubic-bezier(.16, 1, .3, 1) both;
     }
 
     .account-list,
@@ -63,6 +81,8 @@
     }
 
     .account-row {
+      position: relative;
+      isolation: isolate;
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, auto);
       align-items: center;
@@ -72,13 +92,43 @@
       overflow: hidden;
       border-radius: var(--radius);
       background: var(--surface);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+      transition: transform .35s cubic-bezier(.16, 1, .3, 1), background-color .35s ease, box-shadow .35s ease;
+      animation: card-in .75s cubic-bezier(.16, 1, .3, 1) both;
     }
+
+    .account-row:nth-child(1) { animation-delay: .08s; }
+    .account-row:nth-child(2) { animation-delay: .14s; }
+    .account-row:nth-child(3) { animation-delay: .20s; }
+    .account-row:nth-child(4) { animation-delay: .26s; }
+    .account-row:nth-child(5) { animation-delay: .32s; }
+    .account-row:nth-child(6) { animation-delay: .38s; }
+    .account-row:nth-child(7) { animation-delay: .44s; }
+
+    .account-row::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(186, 255, 0, .08) 48%, transparent 66%);
+      transform: translateX(-120%);
+      animation: sheen 1.2s .65s cubic-bezier(.16, 1, .3, 1) both;
+      pointer-events: none;
+    }
+
+    .account-row:hover {
+      background: #151515;
+      box-shadow: 0 0 0 1px rgba(186, 255, 0, .18), 0 18px 42px rgba(0, 0, 0, .35);
+      transform: translateX(6px) scale(1.006);
+    }
+
+    .account-row:active { transform: scale(.985); }
 
     .account-label,
     .account-value {
       color: var(--lime);
       font-size: clamp(1.55rem, 5.6vw, 3.8rem);
-      font-weight: 800;
+      font-weight: 900;
       line-height: 1;
       letter-spacing: -.065em;
     }
@@ -97,13 +147,26 @@
 
     @keyframes value-in {
       0% { opacity: .08; transform: translateY(14px) scale(.92); filter: blur(7px); }
-      60% { opacity: 1; transform: translateY(-2px) scale(1.03); filter: blur(0); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+      60% { opacity: 1; transform: translateY(-2px) scale(1.03); filter: blur(0); text-shadow: 0 0 26px rgba(186, 255, 0, .72); }
+      100% { opacity: 1; transform: translateY(0) scale(1); text-shadow: 0 0 0 rgba(186, 255, 0, 0); }
     }
+
+    @keyframes title-in {
+      from { opacity: 0; transform: translateX(-34px); filter: blur(8px); }
+      to { opacity: 1; transform: translateX(0); filter: blur(0); }
+    }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(30px) scale(.965); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes sheen { to { transform: translateX(120%); } }
 
     .section-title {
       margin: clamp(74px, 10vw, 112px) 0 clamp(24px, 4vw, 42px) clamp(8px, 1.3vw, 15px);
       font-size: clamp(3.75rem, 11.5vw, 7.35rem);
+      animation: title-in .8s .36s cubic-bezier(.16, 1, .3, 1) both;
     }
 
     .holding-row {
@@ -116,14 +179,22 @@
       overflow: hidden;
       border-radius: var(--radius);
       background: var(--surface);
+      opacity: 0;
+      transform: translateY(24px) scale(.98);
+      transition: opacity .6s ease var(--row-delay, 0ms), transform .7s cubic-bezier(.16, 1, .3, 1) var(--row-delay, 0ms), background-color .25s ease;
     }
+
+    .holding-row.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+    .holding-row:hover { background: #171717; transform: translateX(6px) scale(1.004); }
+    .holding-row:hover .holding-weight { color: var(--lime); }
+    .holding-row:active { transform: scale(.985); }
 
     .holding-name,
     .holding-weight {
       overflow: hidden;
       color: var(--text);
       font-size: clamp(1rem, 3.25vw, 2.18rem);
-      font-weight: 700;
+      font-weight: 900;
       line-height: 1.05;
       letter-spacing: -.045em;
       text-overflow: ellipsis;
@@ -139,10 +210,16 @@
       margin: clamp(84px, 12vw, 140px) 0 0;
       color: var(--lime);
       font-size: clamp(1.85rem, 5.3vw, 3.75rem);
-      font-weight: 800;
+      font-weight: 900;
       line-height: 1;
       letter-spacing: -.08em;
       text-align: center;
+      animation: footer-float 3.4s ease-in-out infinite;
+    }
+
+    @keyframes footer-float {
+      0%, 100% { transform: translateY(0); text-shadow: 0 0 0 rgba(186, 255, 0, 0); }
+      50% { transform: translateY(-6px); text-shadow: 0 0 22px rgba(186, 255, 0, .26); }
     }
 
     .data-status {
@@ -171,7 +248,7 @@
       background: #181818;
       color: var(--text);
       font-size: .75rem;
-      font-weight: 700;
+      font-weight: 900;
       opacity: 0;
       transform: translateX(-50%);
       transition: top .2s ease, opacity .2s ease;
@@ -191,9 +268,20 @@
       .account-label, .account-value { font-size: 1.42rem; }
       .holding-name, .holding-weight { font-size: .93rem; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+      .holding-row { opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <div class="pull-refresh" id="pullRefresh" aria-hidden="true"><span class="pull-arrow" id="pullArrow">↓</span><span id="pullText">PULL TO REFRESH</span></div>
 
   <main class="page">
@@ -202,11 +290,11 @@
     <section class="account-list" aria-label="QQQM 持仓数据">
       <div class="account-row"><span class="account-label">代码</span><span class="account-value" id="symbolValue">QQQM</span></div>
       <div class="account-row"><span class="account-label">持有</span><span class="account-value" id="sharesValue">4.0000</span></div>
-      <div class="account-row"><span class="account-label">成本</span><span class="account-value" id="costValue">$276.63</span></div>
-      <div class="account-row"><span class="account-label">现价</span><span class="account-value" id="priceValue">$294.69</span></div>
-      <div class="account-row"><span class="account-label">盈亏</span><span class="account-value" id="profitValue">+$56.63</span></div>
-      <div class="account-row"><span class="account-label">价值</span><span class="account-value" id="valueValue">¥8762.63</span></div>
-      <div class="account-row"><span class="account-label">最大回撤</span><span class="account-value" id="drawdownValue">−$62.63</span></div>
+      <div class="account-row"><span class="account-label">成本</span><span class="account-value" id="costValue">$276.60</span></div>
+      <div class="account-row"><span class="account-label">现价</span><span class="account-value" id="priceValue">$294.39</span></div>
+      <div class="account-row"><span class="account-label">盈亏</span><span class="account-value" id="profitValue">+$71.16</span></div>
+      <div class="account-row"><span class="account-label">价值</span><span class="account-value" id="valueValue">¥7896.36</span></div>
+      <div class="account-row"><span class="account-label">最大回撤</span><span class="account-value" id="drawdownValue">$0.00</span></div>
     </section>
 
     <section aria-labelledby="holdings-heading">
@@ -229,24 +317,26 @@
     const FALLBACK_DATA = {
       symbol: "QQQM",
       shares: 4,
-      costUsd: 276.63,
-      profitUsd: 56.63,
-      valueCny: 8762.63,
-      maxDrawdownUsd: -62.63,
-      averageCostUsd: 276.63,
-      quote: { price: 294.69, change: 0, changePercent: 0 },
-      fx: { usdCny: 7.4354, date: "2026-09-12" },
+      costUsd: 276.60,
+      profitUsd: 71.16,
+      valueCny: 7896.36,
+      maxDrawdownUsd: 0,
+      averageCostUsd: 276.60,
+      quote: { price: 294.39, change: 2.59, changePercent: 0.8876 },
+      fx: { usdCny: 6.7057, date: "2026-09-13" },
+      holdingsDate: "2026-09-10",
+      totalHoldings: 109,
       holdings: [
-        { name: "NVIDIA Corp", ticker: "NVDA", weight: 7.60 },
-        { name: "Apple Inc", ticker: "AAPL", weight: 6.67 },
-        { name: "Alphabet Inc", ticker: "GOOGL / GOOG", weight: 6.29 },
-        { name: "Micron Technology Inc", ticker: "MU", weight: 5.64 },
-        { name: "Microsoft Corp", ticker: "MSFT", weight: 4.35 },
-        { name: "Advanced Micro Devices Inc", ticker: "AMD", weight: 4.11 },
-        { name: "Amazon.com Inc", ticker: "AMZN", weight: 4.03 },
-        { name: "Tesla Inc", ticker: "TSLA", weight: 3.30 },
-        { name: "Intel Corp", ticker: "INTC", weight: 3.04 },
-        { name: "Broadcom Inc", ticker: "AVGO", weight: 2.81 }
+        { name: "NVIDIA Corp", ticker: "NVDA", weight: 8.528539 },
+        { name: "Apple Inc", ticker: "AAPL", weight: 7.732313 },
+        { name: "Microsoft Corp", ticker: "MSFT", weight: 5.897113 },
+        { name: "Micron Technology Inc", ticker: "MU", weight: 4.905562 },
+        { name: "Amazon.com Inc", ticker: "AMZN", weight: 4.368134 },
+        { name: "Advanced Micro Devices Inc", ticker: "AMD", weight: 3.654609 },
+        { name: "Alphabet Inc", ticker: "GOOGL", weight: 3.124783 },
+        { name: "Meta Platforms Inc", ticker: "META", weight: 3.076209 },
+        { name: "Tesla Inc", ticker: "TSLA", weight: 2.927804 },
+        { name: "Alphabet Inc", ticker: "GOOG", weight: 2.907904 }
       ],
       history: []
     };
@@ -255,6 +345,7 @@
     let isRefreshing = false;
     let pullStartY = 0;
     let pullDistance = 0;
+    let holdingObserver;
 
     const $ = (id) => document.getElementById(id);
     const money = (value) => `$${Number(value || 0).toFixed(2)}`;
@@ -300,11 +391,30 @@
     }
 
     function renderHoldings() {
-      $("holdingsList").innerHTML = (state.holdings || []).slice(0, 10).map((item) => `
-        <div class="holding-row">
+      $("holdingsList").innerHTML = (state.holdings || []).slice(0, 10).map((item, index) => `
+        <div class="holding-row" style="--row-delay:${Math.min(index * 55, 440)}ms" title="${escapeHtml(item.ticker || "")}">
           <span class="holding-name">${escapeHtml(item.name)}</span>
           <span class="holding-weight">${Number(item.weight || 0).toFixed(2)}%</span>
         </div>`).join("");
+      revealHoldingRows();
+    }
+
+    function revealHoldingRows() {
+      if (holdingObserver) holdingObserver.disconnect();
+      const rows = [...document.querySelectorAll(".holding-row")];
+      if (!("IntersectionObserver" in window)) {
+        rows.forEach((row) => row.classList.add("is-visible"));
+        return;
+      }
+      holdingObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            holdingObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12, rootMargin: "0px 0px -5%" });
+      rows.forEach((row) => holdingObserver.observe(row));
     }
 
     async function fetchRuntimeData() {
@@ -378,7 +488,19 @@
       }, { passive: true });
     }
 
+    function bindScrollProgress() {
+      const progress = $("scrollProgress");
+      const update = () => {
+        const distance = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        progress.style.transform = `scaleX(${Math.min(1, Math.max(0, window.scrollY / distance))})`;
+      };
+      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update, { passive: true });
+      update();
+    }
+
     bindPullToRefresh();
+    bindScrollProgress();
     renderAccount();
     renderHoldings();
     refreshData();

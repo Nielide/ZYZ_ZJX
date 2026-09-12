@@ -1,19 +1,60 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(here, "..", "data", "data.json");
 const finnhubKey = process.env.FINNHUB_API_KEY;
+const execFileAsync = promisify(execFile);
 
 if (!finnhubKey) {
   throw new Error("FINNHUB_API_KEY is required. Add it in GitHub Settings → Secrets and variables → Actions.");
 }
 
-async function getJson(url) {
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
+async function getJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: { Accept: "application/json", ...(options.headers || {}) }
+  });
   if (!response.ok) throw new Error(`${response.status} ${url}`);
   return response.json();
+}
+
+async function updateOfficialHoldings(data) {
+  const url = `https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46138G649/holdings/fund?idType=cusip&productType=ETF&_=${Date.now()}`;
+  try {
+    const curl = process.platform === "win32" ? "curl.exe" : "curl";
+    const { stdout } = await execFileAsync(curl, [
+      "--fail", "--silent", "--show-error", "--location", "--max-time", "30",
+      url,
+      "--header", "Accept: application/json, text/plain, */*",
+      "--header", "User-Agent: Mozilla/5.0",
+      "--header", "Origin: https://www.invesco.com",
+      "--header", "Referer: https://www.invesco.com/"
+    ], { maxBuffer: 2 * 1024 * 1024 });
+    const result = JSON.parse(stdout);
+    const holdings = (result.holdings || [])
+      .filter((item) => item.ticker && item.issuerName && Number.isFinite(Number(item.percentageOfTotalNetAssets)))
+      .sort((a, b) => Number(b.percentageOfTotalNetAssets) - Number(a.percentageOfTotalNetAssets))
+      .slice(0, 10)
+      .map((item) => ({
+        name: String(item.issuerName).replaceAll("&amp;", "&"),
+        ticker: String(item.ticker),
+        weight: Number(Number(item.percentageOfTotalNetAssets).toFixed(6))
+      }));
+
+    if (holdings.length === 10) {
+      data.holdings = holdings;
+      data.holdingsDate = result.effectiveDate || result.asOfDate || null;
+      data.totalHoldings = Number(result.totalNumberOfHoldings || result.holdings.length || holdings.length);
+    } else {
+      throw new Error(`expected 10 holdings, received ${holdings.length}`);
+    }
+  } catch (error) {
+    console.warn(`official holdings update skipped: ${error.message}`);
+  }
 }
 
 function shanghaiDate(date = new Date()) {
@@ -48,6 +89,8 @@ const previous = previousHistory.at(-1);
 const dailyPnlUsd = previous ? valueUsd - Number(previous.valueUsd || 0) : Number(quote.d || 0) * shares;
 const dailyRate = previous?.valueUsd ? dailyPnlUsd / Number(previous.valueUsd) * 100 : Number(quote.dp || 0);
 const averageCostUsd = Number(data.averageCostUsd || 0);
+
+await updateOfficialHoldings(data);
 
 data.quote = {
   price,

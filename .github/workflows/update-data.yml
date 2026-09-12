@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 24
 
-      - name: Update quote, FX, history and drawdown
+      - name: Update quote, FX, holdings, history and drawdown
         env:
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: node scripts/update-data.mjs

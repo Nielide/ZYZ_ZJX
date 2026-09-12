@@ -1,9 +1,9 @@
 {
   "symbol": "QQQM",
   "shares": 4,
-  "averageCostUsd": 276.63,
-  "costUsd": 276.63,
-  "profitUsd": 71.04,
+  "averageCostUsd": 276.6,
+  "costUsd": 276.6,
+  "profitUsd": 71.16,
   "valueCny": 7896.364092,
   "maxDrawdownUsd": 0,
   "quote": {
@@ -16,17 +16,19 @@
     "usdCny": 6.7057,
     "date": "2026-09-13"
   },
+  "holdingsDate": "2026-09-10",
+  "totalHoldings": 109,
   "holdings": [
-    { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 7.60 },
-    { "name": "Apple Inc", "ticker": "AAPL", "weight": 6.67 },
-    { "name": "Alphabet Inc", "ticker": "GOOGL / GOOG", "weight": 6.29 },
-    { "name": "Micron Technology Inc", "ticker": "MU", "weight": 5.64 },
-    { "name": "Microsoft Corp", "ticker": "MSFT", "weight": 4.35 },
-    { "name": "Advanced Micro Devices Inc", "ticker": "AMD", "weight": 4.11 },
-    { "name": "Amazon.com Inc", "ticker": "AMZN", "weight": 4.03 },
-    { "name": "Tesla Inc", "ticker": "TSLA", "weight": 3.30 },
-    { "name": "Intel Corp", "ticker": "INTC", "weight": 3.04 },
-    { "name": "Broadcom Inc", "ticker": "AVGO", "weight": 2.81 }
+    { "name": "NVIDIA Corp", "ticker": "NVDA", "weight": 8.528539 },
+    { "name": "Apple Inc", "ticker": "AAPL", "weight": 7.732313 },
+    { "name": "Microsoft Corp", "ticker": "MSFT", "weight": 5.897113 },
+    { "name": "Micron Technology Inc", "ticker": "MU", "weight": 4.905562 },
+    { "name": "Amazon.com Inc", "ticker": "AMZN", "weight": 4.368134 },
+    { "name": "Advanced Micro Devices Inc", "ticker": "AMD", "weight": 3.654609 },
+    { "name": "Alphabet Inc", "ticker": "GOOGL", "weight": 3.124783 },
+    { "name": "Meta Platforms Inc", "ticker": "META", "weight": 3.076209 },
+    { "name": "Tesla Inc", "ticker": "TSLA", "weight": 2.927804 },
+    { "name": "Alphabet Inc", "ticker": "GOOG", "weight": 2.907904 }
   ],
   "history": [
     {
@@ -36,7 +38,7 @@
       "valueCny": 7896.364092,
       "dailyPnlUsd": 0,
       "dailyPnlCny": 0,
-      "cumulativePnlUsd": 71.04,
+      "cumulativePnlUsd": 71.16,
       "rate": 0
     }
   ],
