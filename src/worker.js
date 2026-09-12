@@ -59,18 +59,15 @@ async function serveLatestRepositoryFile(request, env, pathname) {
       JSON.parse(new TextDecoder().decode(body));
     }
 
-    const headers = new Headers(response.headers);
-    headers.delete("Content-Encoding");
-    headers.delete("Content-Length");
-    headers.set("Content-Type", getContentType(pathname, response.headers.get("Content-Type")));
-    headers.set(
-      "Cache-Control",
-      pathname.endsWith(".woff2")
+    const headers = new Headers({
+      "Content-Type": getContentType(pathname, response.headers.get("Content-Type")),
+      "Cache-Control": pathname.endsWith(".woff2")
         ? "public, max-age=3600, must-revalidate"
-        : "public, max-age=0, must-revalidate"
-    );
-    headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("X-QQQM-Source", isHtml ? "github-api" : "github-raw");
+        : "no-store",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Content-Type-Options": "nosniff",
+      "X-QQQM-Source": isHtml ? "github-api" : "github-raw"
+    });
 
     return new Response(request.method === "HEAD" ? null : body, {
       status: response.status,
