@@ -27,7 +27,9 @@
 
 每日工作流会同时更新 `data/data.json` 和 `dist/data/data.json`，因此 GitHub Pages 与 Cloudflare Pages 会使用同一份最新数据。
 
-当前自定义域名部署使用 Cloudflare Workers Static Assets。`qqqm.hedh8899.top` 直接提供 `dist` 中的网页，Worker 代替浏览器读取 GitHub 定时生成的最新 JSON；即使访客网络无法访问 GitHub，也不会影响打开网页或读取已缓存的数据。
+当前自定义域名部署使用 Cloudflare Workers Static Assets。`qqqm.hedh8899.top` 由 Worker 在服务端读取 GitHub `main` 分支的最新 `index.html`、数据和字体资源，边缘缓存按分钟更新；GitHub 暂时不可用时自动回退到最近一次随 Worker 部署的 `dist` 副本。访客浏览器无需直接连接 GitHub。
+
+因此，修改网页后只需提交并推送到 GitHub `main` 分支，通常 1–2 分钟内即可在自定义域名生效。只有修改 `src/worker.js` 或 `wrangler.jsonc` 时，才需要重新执行一次 Cloudflare Worker 部署。
 
 ## 数据说明
 
