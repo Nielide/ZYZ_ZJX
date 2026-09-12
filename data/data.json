@@ -10,7 +10,7 @@
     "price": 294.39,
     "change": 2.59,
     "changePercent": 0.8876,
-    "timestamp": "2026-09-12T10:10:04.484Z"
+    "timestamp": "2026-09-12T11:13:12.264Z"
   },
   "fx": {
     "usdCny": 6.7058,
@@ -119,5 +119,5 @@
       "progressPct": 93.3779
     }
   ],
-  "updatedAt": "2026-09-12T10:10:04.484Z"
+  "updatedAt": "2026-09-12T11:13:12.264Z"
 }
