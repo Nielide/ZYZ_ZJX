@@ -3,18 +3,18 @@
   "shares": 4,
   "averageCostUsd": 276.6,
   "costUsd": 276.6,
-  "profitUsd": 74.39999999999986,
-  "valueCny": 7918.5628799999995,
+  "profitUsd": 81.24000000000001,
+  "valueCny": 7958.969460000001,
   "maxDrawdownUsd": -17.2,
   "quote": {
-    "price": 295.2,
-    "change": 5,
-    "changePercent": 1.7229,
-    "timestamp": "2026-09-18T00:39:10.949Z"
+    "price": 296.91,
+    "change": 1.71,
+    "changePercent": 0.5793,
+    "timestamp": "2026-09-19T00:30:23.216Z"
   },
   "fx": {
-    "usdCny": 6.7061,
-    "date": "2026-09-17"
+    "usdCny": 6.7015,
+    "date": "2026-09-20"
   },
   "holdingsDate": "2026-09-10",
   "totalHoldings": 109,
@@ -120,44 +120,54 @@
       "dailyPnlCny": 134.122,
       "cumulativePnlUsd": 74.39999999999986,
       "rate": 1.722949689869056
+    },
+    {
+      "date": "2026-09-19",
+      "priceUsd": 296.91,
+      "valueUsd": 1187.64,
+      "valueCny": 7958.969460000001,
+      "dailyPnlUsd": 6.8400000000001455,
+      "dailyPnlCny": 45.83826000000098,
+      "cumulativePnlUsd": 81.24000000000001,
+      "rate": 0.5792682926829391
     }
   ],
   "drawdown": [
     {
       "symbol": "QQQM",
-      "high": 295.2,
-      "current": 295.2,
+      "high": 296.91,
+      "current": 296.91,
       "distance": 0,
       "progressPct": 100
     },
     {
       "symbol": "NVDA",
       "high": 235.47,
-      "current": 219.34,
-      "distance": 6.8501,
-      "progressPct": 93.1499
+      "current": 222.27,
+      "distance": 5.6058,
+      "progressPct": 94.3942
     },
     {
       "symbol": "MSFT",
       "high": 538.66,
-      "current": 497.75,
-      "distance": 7.5948,
-      "progressPct": 92.4052
+      "current": 493.78,
+      "distance": 8.3318,
+      "progressPct": 91.6682
     },
     {
       "symbol": "GOOGL",
       "high": 402.38,
-      "current": 347.33,
-      "distance": 13.6811,
-      "progressPct": 86.3189
+      "current": 349.54,
+      "distance": 13.1319,
+      "progressPct": 86.8681
     },
     {
       "symbol": "AMZN",
       "high": 274.99,
-      "current": 251.19,
-      "distance": 8.6549,
-      "progressPct": 91.3451
+      "current": 253.71,
+      "distance": 7.7385,
+      "progressPct": 92.2615
     }
   ],
-  "updatedAt": "2026-09-18T00:39:10.949Z"
+  "updatedAt": "2026-09-19T00:30:23.216Z"
 }
