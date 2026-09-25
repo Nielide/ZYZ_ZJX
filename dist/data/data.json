@@ -4,17 +4,17 @@
   "averageCostUsd": 276.6,
   "costUsd": 276.6,
   "profitUsd": 114.15999999999985,
-  "valueCny": 8178.972559999999,
+  "valueCny": 8187.272367999999,
   "maxDrawdownUsd": -17.2,
   "quote": {
     "price": 305.14,
-    "change": -2.64,
-    "changePercent": -0.8578,
-    "timestamp": "2026-09-24T00:44:32.591Z"
+    "change": 0,
+    "changePercent": 0,
+    "timestamp": "2026-09-25T00:41:23.225Z"
   },
   "fx": {
-    "usdCny": 6.701,
-    "date": "2026-09-23"
+    "usdCny": 6.7078,
+    "date": "2026-09-24"
   },
   "holdingsDate": "2026-09-10",
   "totalHoldings": 109,
@@ -160,6 +160,16 @@
       "dailyPnlCny": -70.76255999999962,
       "cumulativePnlUsd": 114.15999999999985,
       "rate": -0.8577555396711893
+    },
+    {
+      "date": "2026-09-25",
+      "priceUsd": 305.14,
+      "valueUsd": 1220.56,
+      "valueCny": 8187.272367999999,
+      "dailyPnlUsd": 0,
+      "dailyPnlCny": 0,
+      "cumulativePnlUsd": 114.15999999999985,
+      "rate": 0
     }
   ],
   "drawdown": [
@@ -173,31 +183,31 @@
     {
       "symbol": "NVDA",
       "high": 235.47,
-      "current": 225.51,
-      "distance": 4.2298,
-      "progressPct": 95.7702
+      "current": 224.58,
+      "distance": 4.6248,
+      "progressPct": 95.3752
     },
     {
       "symbol": "MSFT",
       "high": 538.66,
-      "current": 500.59,
-      "distance": 7.0675,
-      "progressPct": 92.9325
+      "current": 497.93,
+      "distance": 7.5614,
+      "progressPct": 92.4386
     },
     {
       "symbol": "GOOGL",
       "high": 402.38,
-      "current": 337.83,
-      "distance": 16.042,
-      "progressPct": 83.958
+      "current": 342.36,
+      "distance": 14.9162,
+      "progressPct": 85.0838
     },
     {
       "symbol": "AMZN",
       "high": 274.99,
-      "current": 249.27,
-      "distance": 9.3531,
-      "progressPct": 90.6469
+      "current": 249.38,
+      "distance": 9.3131,
+      "progressPct": 90.6869
     }
   ],
-  "updatedAt": "2026-09-24T00:44:32.591Z"
+  "updatedAt": "2026-09-25T00:41:23.225Z"
 }
