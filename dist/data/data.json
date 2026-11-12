@@ -3,18 +3,18 @@
   "shares": 4,
   "averageCostUsd": 276.6,
   "costUsd": 276.6,
-  "profitUsd": 5.079999999999927,
-  "valueCny": 7409.347976,
+  "profitUsd": 30.519999999999982,
+  "valueCny": 7577.912876,
   "maxDrawdownUsd": -183.64,
   "quote": {
-    "price": 277.87,
-    "change": -1.65,
-    "changePercent": -0.5903,
-    "timestamp": "2026-11-11T02:05:47.224Z"
+    "price": 284.23,
+    "change": 6.36,
+    "changePercent": 2.2888,
+    "timestamp": "2026-11-12T03:15:45.080Z"
   },
   "fx": {
-    "usdCny": 6.6662,
-    "date": "2026-11-11"
+    "usdCny": 6.6653,
+    "date": "2026-11-12"
   },
   "holdingsDate": "2026-09-10",
   "totalHoldings": 109,
@@ -500,44 +500,54 @@
       "dailyPnlCny": -43.99691999999939,
       "cumulativePnlUsd": 5.079999999999927,
       "rate": -0.5902976531196256
+    },
+    {
+      "date": "2026-11-12",
+      "priceUsd": 284.23,
+      "valueUsd": 1136.92,
+      "valueCny": 7577.912876,
+      "dailyPnlUsd": 25.440000000000055,
+      "dailyPnlCny": 169.56523200000038,
+      "cumulativePnlUsd": 30.519999999999982,
+      "rate": 2.2888401050851166
     }
   ],
   "drawdown": [
     {
       "symbol": "QQQM",
       "high": 312.76,
-      "current": 277.87,
-      "distance": 11.1555,
-      "progressPct": 88.8445
+      "current": 284.23,
+      "distance": 9.122,
+      "progressPct": 90.878
     },
     {
       "symbol": "NVDA",
       "high": 239.24,
-      "current": 168.89,
-      "distance": 29.4056,
-      "progressPct": 70.59440000000001
+      "current": 173.73,
+      "distance": 27.3825,
+      "progressPct": 72.6175
     },
     {
       "symbol": "MSFT",
       "high": 555.8,
-      "current": 533.16,
-      "distance": 4.0734,
-      "progressPct": 95.9266
+      "current": 521.125,
+      "distance": 6.2388,
+      "progressPct": 93.7612
     },
     {
       "symbol": "GOOGL",
       "high": 402.38,
-      "current": 287.38,
-      "distance": 28.5799,
-      "progressPct": 71.4201
+      "current": 293.45,
+      "distance": 27.0714,
+      "progressPct": 72.9286
     },
     {
       "symbol": "AMZN",
       "high": 274.99,
-      "current": 270.87,
-      "distance": 1.4982,
-      "progressPct": 98.5018
+      "current": 266.17,
+      "distance": 3.2074,
+      "progressPct": 96.7926
     }
   ],
-  "updatedAt": "2026-11-11T02:05:47.224Z"
+  "updatedAt": "2026-11-12T03:15:45.080Z"
 }
