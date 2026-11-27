@@ -4,17 +4,17 @@
   "averageCostUsd": 276.6,
   "costUsd": 276.6,
   "profitUsd": -62.200000000000045,
-  "valueCny": 6962.09908,
+  "valueCny": 6957.5046,
   "maxDrawdownUsd": -246.12,
   "quote": {
     "price": 261.05,
     "change": -1.73,
     "changePercent": -0.6583,
-    "timestamp": "2026-11-26T04:15:59.462Z"
+    "timestamp": "2026-11-27T04:25:37.064Z"
   },
   "fx": {
-    "usdCny": 6.6674,
-    "date": "2026-11-26"
+    "usdCny": 6.663,
+    "date": "2026-11-27"
   },
   "holdingsDate": "2026-09-10",
   "totalHoldings": 109,
@@ -610,6 +610,16 @@
       "dailyPnlCny": -46.13840799999897,
       "cumulativePnlUsd": -62.200000000000045,
       "rate": -0.6583453839713682
+    },
+    {
+      "date": "2026-11-27",
+      "priceUsd": 261.05,
+      "valueUsd": 1044.2,
+      "valueCny": 6957.5046,
+      "dailyPnlUsd": 0,
+      "dailyPnlCny": 0,
+      "cumulativePnlUsd": -62.200000000000045,
+      "rate": 0
     }
   ],
   "drawdown": [
@@ -649,5 +659,5 @@
       "progressPct": 88.8869
     }
   ],
-  "updatedAt": "2026-11-26T04:15:59.462Z"
+  "updatedAt": "2026-11-27T04:25:37.064Z"
 }
